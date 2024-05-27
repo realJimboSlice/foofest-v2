@@ -1,4 +1,4 @@
-// This code was commented with the assistance of GitHub Copilot to increase readability and understanding
+// This code was commented with the assistance of GitHub Copilot to increase readability
 
 // Importing necessary modules
 import Image from "next/image";
