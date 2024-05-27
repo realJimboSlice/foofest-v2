@@ -28,12 +28,12 @@ export default async function Lineup() {
           <div key={band.slug} className="">
             <div className="">
               {/* Link to the band's page */}
-              <Link href={`/${band.slug}`}>
+              <Link href={`/bands/${band.slug}`}>
                 {/* Display the band's name */}
                 <span className="">{band.name}</span>
               </Link>
               {/* Link to the band's page */}
-              <Link href={`/${band.slug}`}>
+              <Link href={`/bands/${band.slug}`}>
                 {/* Display the band's logo */}
                 <Image
                   src={
