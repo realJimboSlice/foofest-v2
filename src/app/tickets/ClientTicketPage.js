@@ -1,3 +1,5 @@
+// GitHub Copilot added comments
+
 // Import necessary hooks and router from react and next.js
 import { useState } from "react";
 import { useRouter } from "next/navigation";

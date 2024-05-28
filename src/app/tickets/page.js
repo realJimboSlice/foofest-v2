@@ -1,3 +1,5 @@
+// GitHub Copilot added comments
+
 // Import necessary modules from react
 import React from "react";
 // Import the ClientTicketPage component
