@@ -1,9 +1,10 @@
+// ChatGPT 4 was used to assist in splitting my code into two components. Read more in ClientTicket.js
 // GitHub Copilot added comments
 
 // Import necessary modules from react
 import React from "react";
 // Import the ClientTicketPage component
-import ClientTicketPage from "./ClientTicketPage";
+import ClientTicket from "./ClientTicket";
 
 // Define an async function to fetch available spots
 async function fetchSpots() {
@@ -24,7 +25,7 @@ const TicketPage = async () => {
   // Fetch the available spots
   const spots = await fetchSpots();
   // Render the ClientTicketPage component with the fetched spots as a prop
-  return <ClientTicketPage spots={spots} />;
+  return <ClientTicket spots={spots} />;
 };
 
 // Export the TicketPage component

@@ -1,11 +1,18 @@
+// ChatGPT 4 was used to assist in splitting my code into two components.
+// Before, I had a single page that handled both both server-side data fetching and client-side interactivity.
+// Now page.js handles data fetching and initial server-side rendering. This makes the initial load faster and improves SEO by pre-rendering the page with the necessary data.
+// and ClientTicket interactivity and state. By keeping client-side logic separate, the code becomes easier to maintain and debug.
 // GitHub Copilot added comments
+
+// This directive indicates that this component should be rendered on the client side.
+"use client";
 
 // Import necessary hooks and router from react and next.js
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 // Define the ClientTicketPage component
-const ClientTicketPage = ({ spots }) => {
+const ClientTicket = ({ spots }) => {
   // Use the useRouter hook to allow navigation
   const router = useRouter();
   // Use the useState hook to manage loading state
@@ -55,4 +62,4 @@ const ClientTicketPage = ({ spots }) => {
 };
 
 // Export the component
-export default ClientTicketPage;
+export default ClientTicket;
