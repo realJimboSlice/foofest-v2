@@ -24,6 +24,7 @@ const ClientTicket = ({ spots }) => {
     setLoading(true);
     // Navigate to the booking page for the selected area
     router.push(`/booking?area=${area}`);
+    console.log(`Navigating to booking page for ${area}`);
   };
 
   // Render the component
