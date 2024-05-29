@@ -94,10 +94,40 @@ const PaymentPage = () => {
     return retainedPart + maskedPart;
   };
 
-  // Handle form submission
+  const handleExpiryInput = (event) => {
+    const input = event.target;
+    let value = input.value.replace(/\D/g, ""); // Remove non-digit characters
+
+    if (value.length >= 2) {
+      let month = value.slice(0, 2);
+      if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
+        month = "12";
+      }
+      value = month + value.slice(2);
+    }
+
+    if (value.length >= 4) {
+      let year = value.slice(2, 4);
+      if (parseInt(year, 10) < 24) {
+        year = "24";
+      } else if (parseInt(year, 10) > 99) {
+        year = "99";
+      }
+      value = value.slice(0, 2) + "/" + year;
+    } else if (value.length > 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2);
+    }
+
+    setValue("expiry", value);
+  };
+
+  const handleCVCInput = (event) => {
+    const input = event.target;
+    input.value = input.value.replace(/\D/g, "").slice(0, 3); // Only allow up to 3 digits
+  };
+
   const onSubmit = async (data) => {
     // Determine the length of the card number and mask the remaining digits
-
     const maskedNumber = formatMaskedNumber(number);
 
     // Card issuer (e.g., VISA, MASTERCARD, etc.) in uppercase
@@ -190,6 +220,7 @@ const PaymentPage = () => {
                 placeholder="Card Number"
                 {...register("number")}
                 onFocus={(e) => setFocus(e.target.name)}
+                maxLength={19}
                 className="p-2 border rounded w-full"
               />
             </div>
@@ -200,6 +231,7 @@ const PaymentPage = () => {
                 placeholder="Name"
                 {...register("name")}
                 onFocus={(e) => setFocus(e.target.name)}
+                maxLength={26}
                 className="p-2 border rounded w-full"
               />
             </div>
@@ -210,6 +242,10 @@ const PaymentPage = () => {
                 placeholder="MM/YY"
                 {...register("expiry")}
                 onFocus={(e) => setFocus(e.target.name)}
+                onInput={handleExpiryInput}
+                value={expiry}
+                pattern="\d{2}/\d{2}"
+                maxLength={5}
                 className="p-2 border rounded w-full"
               />
             </div>
@@ -220,6 +256,8 @@ const PaymentPage = () => {
                 placeholder="CVC"
                 {...register("cvc")}
                 onFocus={(e) => setFocus(e.target.name)}
+                onInput={handleCVCInput}
+                maxLength={3}
                 className="p-2 border rounded w-full"
               />
             </div>
