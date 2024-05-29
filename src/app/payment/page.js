@@ -7,6 +7,7 @@ import supabase from "../../lib/supabaseClient";
 import CreditCard from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { useForm } from "react-hook-form";
+import Payment from "payment";
 
 // Define the PaymentPage component
 const PaymentPage = () => {
@@ -21,6 +22,7 @@ const PaymentPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [focus, setFocus] = useState("");
+  const [issuer, setIssuer] = useState("");
 
   // Initialize react-hook-form
   const { register, handleSubmit, setValue, watch } = useForm();
@@ -78,11 +80,62 @@ const PaymentPage = () => {
     fetchBookingDetails();
   }, [reservationId]); // Only re-run the effect if reservationId changes
 
-  // Handle form submission
-  const onSubmit = (data) => {
-    // Handle the payment process here
-    console.log(data);
+  // Function to format and mask the card number
+  const formatMaskedNumber = (number) => {
+    // Remove all spaces and hyphens from the number
+    const cleanNumber = number.replace(/\s|-/g, "");
+
+    // Determine how many digits to retain
+    const retainLength = Math.ceil(cleanNumber.length / 2);
+    const retainedPart = cleanNumber.slice(0, retainLength);
+    const maskedPart = "X".repeat(cleanNumber.length - retainLength);
+
+    // Combine the retained and masked parts
+    return retainedPart + maskedPart;
   };
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    // Determine the length of the card number and mask the remaining digits
+
+    const maskedNumber = formatMaskedNumber(number);
+
+    // Card issuer (e.g., VISA, MASTERCARD, etc.) in uppercase
+    const cardIssuer = issuer
+      .split(" ")
+      .map((word) => word.toUpperCase())
+      .join(" ");
+
+    // Prepare the data to be sent to Supabase
+    const cardData = {
+      "credit-card-issuer": cardIssuer,
+      "credit-card-number": maskedNumber,
+    };
+
+    try {
+      // Update the booking record in Supabase with the card data
+      const { error } = await supabase
+        .from("bookings")
+        .update(cardData)
+        .eq("reservation_id", reservationId);
+
+      if (error) {
+        throw new Error("Error saving payment data.");
+      }
+
+      console.log("Payment data saved successfully.");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // Update issuer based on card number
+  useEffect(() => {
+    if (number) {
+      const cardType = Payment.fns.cardType(number);
+      setIssuer(cardType);
+    }
+  }, [number]);
 
   // Render loading, error, or the payment page based on the state
   if (isLoading) {
@@ -127,6 +180,7 @@ const PaymentPage = () => {
             expiry={expiry}
             cvc={cvc}
             focused={focus}
+            issuer={issuer}
           />
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
