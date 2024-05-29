@@ -183,7 +183,7 @@ const PaymentPage = () => {
             issuer={issuer}
           />
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
+            <div className="mb-3 text-black">
               <input
                 type="tel"
                 name="number"
@@ -193,7 +193,7 @@ const PaymentPage = () => {
                 className="p-2 border rounded w-full"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 text-black">
               <input
                 type="text"
                 name="name"
@@ -203,7 +203,7 @@ const PaymentPage = () => {
                 className="p-2 border rounded w-full"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 text-black">
               <input
                 type="tel"
                 name="expiry"
@@ -213,7 +213,7 @@ const PaymentPage = () => {
                 className="p-2 border rounded w-full"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 text-black">
               <input
                 type="tel"
                 name="cvc"
