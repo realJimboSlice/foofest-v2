@@ -1,31 +1,40 @@
-"use client"; // Indicating this is a client-side component
+// Comments added using GitHub Copilot for increased readability and context
+// Prompt used: Please add comments to the code for better readability and context.
+// Indicating this is a client-side component
+"use client";
 
-import { useRouter } from "next/navigation"; // Updated import for useRouter
-import { useSearchParams } from "next/navigation"; // Added import for useSearchParams
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
-import CountrySelect from "../components/countrySelect"; // Ensure the correct path
-import supabase from "../../lib/supabaseClient"; // Ensure the correct path
+import CountrySelect from "../components/countrySelect";
+import supabase from "../../lib/supabaseClient";
 
 const BookingForm = () => {
+  // Retrieve search parameters from the URL
   const searchParams = useSearchParams();
   const area = searchParams.get("area");
 
+  // Initialize form handling using react-hook-form
   const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    formState: { errors },
+    register, // Registers input elements with react-hook-form
+    handleSubmit, // Handles form submission
+    watch, // Watches form inputs for changes
+    control, // Controls input elements for non-standard inputs
+    formState: { errors }, // Contains form validation errors
   } = useForm();
-  const [totalTickets, setTotalTickets] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [costBreakdown, setCostBreakdown] = useState({});
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-  const bookingFee = 99;
+  // State variables to manage booking details
+  const [totalTickets, setTotalTickets] = useState(0); // Total number of tickets
+  const [totalAmount, setTotalAmount] = useState(0); // Total cost amount
+  const [costBreakdown, setCostBreakdown] = useState({}); // Detailed cost breakdown
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true); // Submission button state
 
+  const bookingFee = 99; // Fixed booking fee
+
+  // Function to handle form submission
   const onSubmit = async (data) => {
+    // Destructure data to get ticket and tent details
     const {
       regularTickets,
       vipTickets,
@@ -34,6 +43,8 @@ const BookingForm = () => {
       greenCamping,
       ...rest
     } = data;
+
+    // Calculate the cost breakdown based on the form inputs
     const breakdown = {
       regularTicketsCost: parseInt(regularTickets) * 799,
       vipTicketsCost: parseInt(vipTickets) * 1299,
@@ -43,17 +54,18 @@ const BookingForm = () => {
       bookingFee,
     };
 
+    // Calculate the total amount paid
     const amountPaid = {
       regularTicketsCost: breakdown.regularTicketsCost,
       vipTicketsCost: breakdown.vipTicketsCost,
       twoPeopleTentsCost: breakdown.twoPeopleTentsCost,
       threePeopleTentsCost: breakdown.threePeopleTentsCost,
-
       greenCampingCost: breakdown.greenCampingCost,
       bookingFee,
       totalAmount,
     };
 
+    // Calculate the total number of tickets
     const totalTickets = parseInt(regularTickets) + parseInt(vipTickets);
 
     try {
@@ -69,6 +81,7 @@ const BookingForm = () => {
         }
       );
 
+      // Parse the response JSON to get reservation ID
       const result = await response.json();
       const reservationId = result.id;
 
@@ -97,16 +110,20 @@ const BookingForm = () => {
         ]);
 
       if (error) {
+        // Log error if insertion fails
         console.error("Error inserting data:", error);
       } else {
+        // Log success message and navigate to payment page
         console.log("Data inserted successfully");
         router.push("/payment"); // Navigate to the payment page
       }
     } catch (error) {
+      // Log error if reservation fails
       console.error("Error reserving spot:", error);
     }
   };
 
+  // Watch specific form fields for changes
   const watchRegularTickets = watch("regularTickets", 0);
   const watchVipTickets = watch("vipTickets", 0);
   const watchTwoPeopleTents = watch("twoPeopleTents", 0);
@@ -161,14 +178,19 @@ const BookingForm = () => {
         Please explain your logic and provide snippets of code if necessary."
         */
   }
+
+  // Effect to calculate costs and update state based on form inputs
   useEffect(() => {
+    // Function to calculate costs based on form inputs
     const calculateCosts = () => {
+      // Calculate individual costs
       const regularTicketsCost = parseInt(watchRegularTickets) * 799 || 0;
       const vipTicketsCost = parseInt(watchVipTickets) * 1299 || 0;
       const twoPeopleTentsCost = parseInt(watchTwoPeopleTents) * 299 || 0;
       const threePeopleTentsCost = parseInt(watchThreePeopleTents) * 399 || 0;
       const greenCampingCost = watchGreenCamping ? 295 : 0;
 
+      // Calculate total tickets and total amount
       const totalTickets =
         parseInt(watchRegularTickets) + parseInt(watchVipTickets);
       setTotalTickets(totalTickets);
@@ -182,6 +204,7 @@ const BookingForm = () => {
         bookingFee;
       setTotalAmount(totalAmount);
 
+      // Set cost breakdown in state
       setCostBreakdown({
         regularTicketsCost: regularTicketsCost || null,
         vipTicketsCost: vipTicketsCost || null,
@@ -191,10 +214,11 @@ const BookingForm = () => {
         bookingFee,
       });
 
+      // Disable submit button if no tickets are selected
       setIsSubmitDisabled(totalTickets === 0);
     };
 
-    calculateCosts();
+    calculateCosts(); // Call the function to calculate costs
   }, [
     watchRegularTickets,
     watchVipTickets,
@@ -218,6 +242,7 @@ const BookingForm = () => {
         */
   }
 
+  // Validate the total number of tents against the total number of tickets
   const validateTents = (value) => {
     const totalTents =
       parseInt(watch("twoPeopleTents") || 0) +
@@ -227,7 +252,7 @@ const BookingForm = () => {
     );
   };
 
-  // Added along with new cost breakdown
+  // Cost items to be displayed in the cost breakdown section
   const costItems = [
     {
       label: `${watchRegularTickets}x Regular Tickets`,
@@ -251,11 +276,14 @@ const BookingForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      {/* Page title */}
       <h1 className="text-4xl font-bold mb-8">Booking</h1>
+      {/* Form for booking */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-black p-8 rounded shadow-md w-full max-w-lg space-y-4"
       >
+        {/* Area selection - disabled as it's preselected */}
         <div className="flex flex-col">
           <label htmlFor="area" className="mb-2">
             Area
@@ -275,6 +303,7 @@ const BookingForm = () => {
           </select>
         </div>
 
+        {/* Regular Tickets selection */}
         <div className="flex flex-col">
           <label htmlFor="regularTickets" className="mb-2">
             Regular Tickets (799,-)
@@ -291,9 +320,11 @@ const BookingForm = () => {
             ))}
           </select>
         </div>
+
+        {/* VIP Tickets selection */}
         <div className="flex flex-col">
           <label htmlFor="vipTickets" className="mb-2">
-            VIP Ticket (1299,-)
+            VIP Tickets (1299,-)
           </label>
           <select
             id="vipTickets"
@@ -307,6 +338,8 @@ const BookingForm = () => {
             ))}
           </select>
         </div>
+
+        {/* Green Camping selection */}
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
@@ -317,6 +350,8 @@ const BookingForm = () => {
             Green Camping (295,-)
           </label>
         </div>
+
+        {/* 2-Person Tents selection */}
         <div className="flex flex-col">
           <label htmlFor="twoPeopleTents" className="mb-2">
             2 person tent - including the tent (299,-)
@@ -332,12 +367,15 @@ const BookingForm = () => {
               </option>
             ))}
           </select>
+          {/* Display error if tents exceed tickets */}
           {errors.twoPeopleTents && (
             <span className="text-red-500 text-sm">
               Total amount of tents cannot exceed total amount of tickets
             </span>
           )}
         </div>
+
+        {/* 3-Person Tents selection */}
         <div className="flex flex-col">
           <label htmlFor="threePeopleTents" className="mb-2">
             3 person tent - including the tent (399,-)
@@ -353,12 +391,15 @@ const BookingForm = () => {
               </option>
             ))}
           </select>
+          {/* Display error if tents exceed tickets */}
           {errors.threePeopleTents && (
             <span className="text-red-500 text-sm">
               Total amount of tents cannot exceed total amount of tickets
             </span>
           )}
         </div>
+
+        {/* Email input */}
         <div className="flex flex-col">
           <label htmlFor="email" className="mb-2">
             E-mail
@@ -369,10 +410,13 @@ const BookingForm = () => {
             {...register("email", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if email is missing */}
           {errors.email && (
             <span className="text-red-500 text-sm">Email is required</span>
           )}
         </div>
+
+        {/* First Name input */}
         <div className="flex flex-col">
           <label htmlFor="firstName" className="mb-2">
             First Name
@@ -383,10 +427,13 @@ const BookingForm = () => {
             {...register("firstName", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if first name is missing */}
           {errors.firstName && (
             <span className="text-red-500 text-sm">First name is required</span>
           )}
         </div>
+
+        {/* Last Name input */}
         <div className="flex flex-col">
           <label htmlFor="lastName" className="mb-2">
             Last Name
@@ -397,10 +444,13 @@ const BookingForm = () => {
             {...register("lastName", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if last name is missing */}
           {errors.lastName && (
             <span className="text-red-500 text-sm">Last name is required</span>
           )}
         </div>
+
+        {/* Address input */}
         <div className="flex flex-col">
           <label htmlFor="address" className="mb-2">
             Address
@@ -411,10 +461,13 @@ const BookingForm = () => {
             {...register("address", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if address is missing */}
           {errors.address && (
             <span className="text-red-500 text-sm">Address is required</span>
           )}
         </div>
+
+        {/* Phone Number input */}
         <div className="flex flex-col">
           <label htmlFor="phoneNumber" className="mb-2">
             Phone Number
@@ -425,12 +478,15 @@ const BookingForm = () => {
             {...register("phoneNumber", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if phone number is missing */}
           {errors.phoneNumber && (
             <span className="text-red-500 text-sm">
               Phone number is required
             </span>
           )}
         </div>
+
+        {/* Postal Code input */}
         <div className="flex flex-col">
           <label htmlFor="postalCode" className="mb-2">
             Postal Code
@@ -441,12 +497,15 @@ const BookingForm = () => {
             {...register("postalCode", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if postal code is missing */}
           {errors.postalCode && (
             <span className="text-red-500 text-sm">
               Postal code is required
             </span>
           )}
         </div>
+
+        {/* City input */}
         <div className="flex flex-col">
           <label htmlFor="city" className="mb-2">
             City
@@ -457,10 +516,13 @@ const BookingForm = () => {
             {...register("city", { required: true })}
             className="p-2 border rounded"
           />
+          {/* Display error if city is missing */}
           {errors.city && (
             <span className="text-red-500 text-sm">City is required</span>
           )}
         </div>
+
+        {/* Country selection using CountrySelect component */}
         <div className="flex flex-col">
           <label htmlFor="country" className="mb-2">
             Country
@@ -476,6 +538,7 @@ const BookingForm = () => {
             )}
             rules={{ required: true }}
           />
+          {/* Display error if country is missing */}
           {errors.country && (
             <span className="text-red-500 text-sm">Country is required</span>
           )}
@@ -521,8 +584,11 @@ const BookingForm = () => {
         This is my currently finished code for my booking site. Do you have any tips for improvements that can be made for better readability, maintainability, and functionality?
         Please explain your logic and provide snippets of code if necessary."
         */}
+
+        {/* Display cost breakdown */}
         <div className="flex flex-col items-center">
           <p className="text-xl font-bold mb-2">Cost Breakdown</p>
+          {/* Iterate through costItems to display each item */}
           {costItems.map(
             (item, index) =>
               item.cost !== null && (
@@ -536,6 +602,7 @@ const BookingForm = () => {
           </p>
         </div>
 
+        {/* Submit button */}
         <button
           type="submit"
           className={`px-6 py-3 ${
