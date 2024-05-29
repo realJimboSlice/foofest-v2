@@ -1,5 +1,5 @@
 // Comments added using GitHub Copilot for increased readability and context
-// Prompt used: Please add comments to the code for better readability and context.
+// Prompt used: Please add helpful comments to the code for better readability and context.
 // Indicating this is a client-side component
 "use client";
 
