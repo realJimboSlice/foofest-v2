@@ -11,6 +11,7 @@ import CountrySelect from "../components/countrySelect";
 import supabase from "../../lib/supabaseClient";
 
 const BookingForm = () => {
+  const router = useRouter();
   // Retrieve search parameters from the URL
   const searchParams = useSearchParams();
   const area = searchParams.get("area");
