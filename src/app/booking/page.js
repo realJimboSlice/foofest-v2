@@ -115,8 +115,22 @@ const BookingForm = () => {
         console.error("Error inserting data:", error);
       } else {
         // Log success message and navigate to payment page
+        // console.log("Data inserted successfully");
+        // router.push("/payment"); // Navigate to the payment page
         console.log("Data inserted successfully");
-        router.push("/payment"); // Navigate to the payment page
+
+        // // Create a URLSearchParams object
+        // const params = new URLSearchParams({
+        //   totalAmount: totalAmount.toString(),
+        //   regularTicketsCost: breakdown.regularTicketsCost.toString(),
+        //   vipTicketsCost: breakdown.vipTicketsCost.toString(),
+        //   twoPeopleTentsCost: breakdown.twoPeopleTentsCost.toString(),
+        //   threePeopleTentsCost: breakdown.threePeopleTentsCost.toString(),
+        //   greenCampingCost: breakdown.greenCampingCost.toString(),
+        //   bookingFee: breakdown.bookingFee.toString(),
+        // });
+
+        router.push(`/payment?reservationId=${reservationId}`);
       }
     } catch (error) {
       // Log error if reservation fails
