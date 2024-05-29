@@ -4,6 +4,9 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabaseClient";
+import CreditCard from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
+import { useForm } from "react-hook-form";
 
 // Define the PaymentPage component
 const PaymentPage = () => {
@@ -12,11 +15,21 @@ const PaymentPage = () => {
   // Extract the reservationId from the search parameters
   const reservationId = searchParams.get("reservationId");
 
-  // Define state variables for total amount, breakdown, loading status, and error message
+  // Define state variables for total amount, breakdown, loading status, error message, and credit card details
   const [totalAmount, setTotalAmount] = useState(0);
   const [breakdown, setBreakdown] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [focus, setFocus] = useState("");
+
+  // Initialize react-hook-form
+  const { register, handleSubmit, setValue, watch } = useForm();
+
+  // Watch form values for credit card fields
+  const number = watch("number", "");
+  const name = watch("name", "");
+  const expiry = watch("expiry", "");
+  const cvc = watch("cvc", "");
 
   // Use the useEffect hook to fetch booking details when the component mounts
   useEffect(() => {
@@ -65,6 +78,12 @@ const PaymentPage = () => {
     fetchBookingDetails();
   }, [reservationId]); // Only re-run the effect if reservationId changes
 
+  // Handle form submission
+  const onSubmit = (data) => {
+    // Handle the payment process here
+    console.log(data);
+  };
+
   // Render loading, error, or the payment page based on the state
   if (isLoading) {
     return <div>Loading...</div>;
@@ -75,11 +94,13 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="">
-      <h1 className="">Payment</h1>
-      <div className="">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-8">Payment</h1>
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-lg space-y-4">
+        <h2 className="text-2xl font-bold mb-4">
+          Total Amount: {totalAmount} kr
+        </h2>
         <div className="space-y-2">
-          {/* Render the cost breakdown */}
           {breakdown.regularTicketsCost > 0 && (
             <p>Regular Tickets Cost: {breakdown.regularTicketsCost} kr</p>
           )}
@@ -99,8 +120,63 @@ const PaymentPage = () => {
             <p>Booking Fee: {breakdown.bookingFee} kr</p>
           )}
         </div>
-        <h2 className="">Total Amount: {totalAmount} kr</h2>
-        {/* React credit cards 2 implementation */}
+        <div className="mt-8">
+          <CreditCard
+            number={number}
+            name={name}
+            expiry={expiry}
+            cvc={cvc}
+            focused={focus}
+          />
+          <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-3">
+              <input
+                type="tel"
+                name="number"
+                placeholder="Card Number"
+                {...register("number")}
+                onFocus={(e) => setFocus(e.target.name)}
+                className="p-2 border rounded w-full"
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                {...register("name")}
+                onFocus={(e) => setFocus(e.target.name)}
+                className="p-2 border rounded w-full"
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="tel"
+                name="expiry"
+                placeholder="MM/YY"
+                {...register("expiry")}
+                onFocus={(e) => setFocus(e.target.name)}
+                className="p-2 border rounded w-full"
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="tel"
+                name="cvc"
+                placeholder="CVC"
+                {...register("cvc")}
+                onFocus={(e) => setFocus(e.target.name)}
+                className="p-2 border rounded w-full"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-6 py-3 bg-green-500 hover:bg-green-700 text-white rounded"
+            >
+              Pay {totalAmount} kr
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
