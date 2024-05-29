@@ -1,7 +1,7 @@
 "use client";
 
 // Import necessary hooks and utilities
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabaseClient";
 import CreditCard from "react-credit-cards-2";
@@ -11,6 +11,8 @@ import Payment from "payment";
 
 // Define the PaymentPage component
 const PaymentPage = () => {
+  // Use the useRouter hook to get the router object
+  const router = useRouter();
   // Use the useSearchParams hook to get the URL search parameters
   const searchParams = useSearchParams();
   // Extract the reservationId from the search parameters
@@ -138,8 +140,8 @@ const PaymentPage = () => {
 
     // Prepare the data to be sent to Supabase
     const cardData = {
-      "credit-card-issuer": cardIssuer,
-      "credit-card-number": maskedNumber,
+      credit_card_issuer: cardIssuer,
+      credit_card_number: maskedNumber,
     };
 
     try {
@@ -154,6 +156,7 @@ const PaymentPage = () => {
       }
 
       console.log("Payment data saved successfully.");
+      router.push(`/confirmation?reservationId=${reservationId}`);
     } catch (error) {
       console.error(error.message);
     }
