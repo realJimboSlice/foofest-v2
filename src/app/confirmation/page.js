@@ -97,7 +97,7 @@ const ConfirmationPage = () => {
       greenCampingCost +
       bookingFee;
 
-    doc.text("Transaction Receipt", 10, 10);
+    doc.text("Foofest Receipt", 10, 10);
     doc.text(`Event: Foofest`, 10, 20);
     doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 30);
     doc.text(`Area: ${bookingDetails.area}`, 10, 40);
