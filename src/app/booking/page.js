@@ -115,27 +115,14 @@ const BookingForm = () => {
         // Log error if insertion fails
         console.error("Error inserting data:", error);
       } else {
-        // Log success message and navigate to payment page
-        // console.log("Data inserted successfully");
-        // router.push("/payment"); // Navigate to the payment page
-        console.log("Data inserted successfully");
+        console.log("Data inserted successfully - redirecting to payment");
 
         // Store the reservation ID and created_at timestamp in localStorage
         const createdAt = new Date().toISOString();
         localStorage.setItem("reservationId", reservationId);
         localStorage.setItem("createdAt", createdAt);
 
-        // // Create a URLSearchParams object
-        // const params = new URLSearchParams({
-        //   totalAmount: totalAmount.toString(),
-        //   regularTicketsCost: breakdown.regularTicketsCost.toString(),
-        //   vipTicketsCost: breakdown.vipTicketsCost.toString(),
-        //   twoPeopleTentsCost: breakdown.twoPeopleTentsCost.toString(),
-        //   threePeopleTentsCost: breakdown.threePeopleTentsCost.toString(),
-        //   greenCampingCost: breakdown.greenCampingCost.toString(),
-        //   bookingFee: breakdown.bookingFee.toString(),
-        // });
-
+        // Redirect to the payment page with the reservation ID
         router.push(`/payment?reservationId=${reservationId}`);
       }
     } catch (error) {
@@ -193,10 +180,10 @@ const BookingForm = () => {
 
   {
     /* New cost breakdown code provided by ChatGPT 4 with the aim to avoid multiple calls and ensure calculations are correct.
-  It is now a single piece of logic that updates the state
+      It is now a single piece of logic that updates the state
         Prompt used: "Hey GPT4, I'm developing in the newest version of Next.JS using Tailwind.css, but not using Typscript.
         This is my currently finished code for my booking site. Do you have any tips for improvements that can be made for better readability, maintainability, and functionality?
-        Please explain your logic step by step, first without code and then with code - provide snippets of code if necessary."
+        Please explain your logic step by step, so that I can learn and become a better developer - first without code and then with code."
         */
   }
 
