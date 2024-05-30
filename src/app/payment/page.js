@@ -74,7 +74,7 @@ const PaymentPage = () => {
           const createdAtTime = new Date(createdAt).getTime();
           const currentTime = new Date().getTime();
           const elapsedTime = Math.floor((currentTime - createdAtTime) / 1000);
-          const remaining = 300 - elapsedTime;
+          const remaining = 60 - elapsedTime;
           setRemainingTime(remaining > 0 ? remaining : 0);
         }
       } catch (error) {
@@ -110,7 +110,7 @@ const PaymentPage = () => {
   };
 
   // Define state variable for remaining time
-  const [remainingTime, setRemainingTime] = useState(300); // 300 seconds = 5 minutes
+  const [remainingTime, setRemainingTime] = useState(60); // 300 seconds = 5 minutes
 
   // Use the useEffect hook for countdown timer
   useEffect(() => {
@@ -203,6 +203,29 @@ const PaymentPage = () => {
       }
 
       console.log("Payment data saved successfully.");
+
+      // Send a POST request to the specified URL
+      const response = await fetch(
+        "https://fluffy-scrawny-hedgehog.glitch.me/fullfill-reservation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: reservationId,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error sending POST request.");
+      }
+
+      console.log(
+        "POST request sent successfully. Reservation has been fulfilled."
+      );
+
       router.push(`/confirmation?reservationId=${reservationId}`);
     } catch (error) {
       console.error(error.message);
