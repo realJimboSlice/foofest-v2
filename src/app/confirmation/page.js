@@ -99,43 +99,44 @@ const ConfirmationPage = () => {
       bookingFee;
 
     doc.text("Foofest Receipt", 10, 10);
-    doc.text(`Event: Foofest`, 10, 20);
-    doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 30);
-    doc.text(`Area: ${bookingDetails.area}`, 10, 40);
+    doc.text(`Booking created: ${bookingDetails.created_at}`, 10, 20);
+    doc.text(`Event: Foofest`, 10, 30);
+    doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 40);
+    doc.text(`Area: ${bookingDetails.area}`, 10, 50);
     doc.text(
       `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
-      10,
-      60
-    );
-    doc.text(
-      `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
       10,
       70
     );
     doc.text(
-      `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
+      `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
       10,
       80
     );
     doc.text(
-      `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+      `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
       10,
       90
     );
-    doc.text(`Green Camping: ${greenCampingCost} kr`, 10, 100);
-    doc.text(`Booking Fee: ${bookingFee} kr`, 10, 110);
-    doc.text(`Total Price: ${totalPrice} kr`, 10, 120);
+    doc.text(
+      `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+      10,
+      100
+    );
+    doc.text(`Green Camping: ${greenCampingCost} kr`, 10, 110);
+    doc.text(`Booking Fee: ${bookingFee} kr`, 10, 120);
+    doc.text(`Total Price: ${totalPrice} kr`, 10, 130);
     doc.text(
       `Name: ${bookingDetails.first_name} ${bookingDetails.last_name}`,
       10,
-      130
+      140
     );
-    doc.text(`Country: ${bookingDetails.country}`, 10, 140);
-    doc.text(`Email: ${bookingDetails.email}`, 10, 150);
+    doc.text(`Country: ${bookingDetails.country}`, 10, 150);
+    doc.text(`Email: ${bookingDetails.email}`, 10, 160);
     doc.text(
       `Paid with ${bookingDetails.credit_card_issuer} ${bookingDetails.credit_card_number}`,
       10,
-      160
+      170
     );
     // doc.text(
     //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
@@ -147,7 +148,7 @@ const ConfirmationPage = () => {
     //   10,
     //   170
     // );
-    doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 170);
+    doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 180);
     doc.save("Transaction_Receipt.pdf");
   };
 
@@ -217,47 +218,48 @@ const ConfirmationPage = () => {
         bookingFee;
 
       receiptDoc.text("Foofest Receipt", 10, 10);
-      receiptDoc.text(`Event: Foofest`, 10, 20);
+      receiptDoc.text(`Booking created: ${bookingDetails.created_at}`, 10, 20);
+      receiptDoc.text(`Event: Foofest`, 10, 30);
       receiptDoc.text(
         `Date: 20th of June 2024 until the 27th of June 2024`,
         10,
-        30
+        40
       );
-      receiptDoc.text(`Area: ${bookingDetails.area}`, 10, 40);
+      receiptDoc.text(`Area: ${bookingDetails.area}`, 10, 50);
       receiptDoc.text(
         `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
-        10,
-        60
-      );
-      receiptDoc.text(
-        `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
         10,
         70
       );
       receiptDoc.text(
-        `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
+        `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
         10,
         80
       );
       receiptDoc.text(
-        `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+        `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
         10,
         90
       );
-      receiptDoc.text(`Green Camping: ${greenCampingCost} kr`, 10, 100);
-      receiptDoc.text(`Booking Fee: ${bookingFee} kr`, 10, 110);
-      receiptDoc.text(`Total Price: ${totalPrice} kr`, 10, 120);
+      receiptDoc.text(
+        `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+        10,
+        100
+      );
+      receiptDoc.text(`Green Camping: ${greenCampingCost} kr`, 10, 110);
+      receiptDoc.text(`Booking Fee: ${bookingFee} kr`, 10, 120);
+      receiptDoc.text(`Total Price: ${totalPrice} kr`, 10, 130);
       receiptDoc.text(
         `Name: ${bookingDetails.first_name} ${bookingDetails.last_name}`,
         10,
-        130
+        140
       );
-      receiptDoc.text(`Country: ${bookingDetails.country}`, 10, 140);
-      receiptDoc.text(`Email: ${bookingDetails.email}`, 10, 150);
+      receiptDoc.text(`Country: ${bookingDetails.country}`, 10, 150);
+      receiptDoc.text(`Email: ${bookingDetails.email}`, 10, 160);
       receiptDoc.text(
         `Paid with ${bookingDetails.credit_card_issuer} ${bookingDetails.credit_card_number}`,
         10,
-        160
+        170
       );
       // doc.text(
       //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
@@ -272,7 +274,7 @@ const ConfirmationPage = () => {
       receiptDoc.text(
         `Reservation ID: ${bookingDetails.reservation_id}`,
         10,
-        170
+        180
       );
       const receiptPdfString = receiptDoc.output("datauristring");
 
@@ -282,7 +284,7 @@ const ConfirmationPage = () => {
           <h1>Your booking has been confirmed!</h1>
           <p>Hello ${bookingDetails.first_name},</p>
           <p>Thank you for booking with Foofest!</p>
-          <p>Please find your receipt and ticket enclosed to this email.</p>
+          <p>Please find your receipt and ticket enclosed in this email.</p>
           <p>We look forward to seeing you at the event!</p>
           <table style="width: 50%; border: 1px solid #ddd; border-collapse: collapse;">
             <tr>
