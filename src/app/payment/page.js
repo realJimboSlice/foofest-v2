@@ -91,6 +91,24 @@ const PaymentPage = () => {
     fetchBookingDetails();
   }, [reservationId]); // Only re-run the effect if reservationId changes
 
+  const deleteReservation = async (reservationId) => {
+    try {
+      const { error } = await supabase
+        .from("bookings")
+        .delete()
+        .eq("reservation_id", reservationId);
+
+      if (error) {
+        console.error("Error deleting reservation:", error);
+      } else {
+        console.log("Reservation deleted successfully.");
+        // Provide navigation here to the tickets page
+      }
+    } catch (error) {
+      console.error("Error deleting reservation:", error);
+    }
+  };
+
   // Define state variable for remaining time
   const [remainingTime, setRemainingTime] = useState(300); // Assuming 300 is the initial remaining time
 
@@ -106,8 +124,9 @@ const PaymentPage = () => {
       setErrorMessage(
         "Session expired. Please start the booking process again."
       );
+      deleteReservation(reservationId);
     }
-  }, [remainingTime]); // Now remainingTime is a valid dependency
+  }, [remainingTime, reservationId]);
 
   // Function to format and mask the card number
   const formatMaskedNumber = (number) => {
