@@ -190,7 +190,7 @@ const BookingForm = () => {
   It is now a single piece of logic that updates the state
         Prompt used: "Hey GPT4, I'm developing in the newest version of Next.JS using Tailwind.css, but not using Typscript.
         This is my currently finished code for my booking site. Do you have any tips for improvements that can be made for better readability, maintainability, and functionality?
-        Please explain your logic and provide snippets of code if necessary."
+        Please explain your logic step by step, first without code and then with code - provide snippets of code if necessary."
         */
   }
 
@@ -253,7 +253,7 @@ const BookingForm = () => {
     /* New validateTents function by ChatGPT 4 to improve clarity
         Prompt used: "Hey GPT4, I'm developing in the newest version of Next.JS using Tailwind.css, but not using Typscript.
         This is my currently finished code for my booking site. Do you have any tips for improvements that can be made for better readability, maintainability, and functionality?
-        Please explain your logic and provide snippets of code if necessary."
+        Please explain your logic step by step, first without code and then with code - provide snippets of code if necessary."
         */
   }
 
@@ -597,7 +597,7 @@ const BookingForm = () => {
         {/* New cost breakdown code provided by ChatGPT 4
         Prompt used: "Hey GPT4, I'm developing in the newest version of Next.JS using Tailwind.css, but not using Typscript.
         This is my currently finished code for my booking site. Do you have any tips for improvements that can be made for better readability, maintainability, and functionality?
-        Please explain your logic and provide snippets of code if necessary."
+        Please explain your logic step by step, first without code and then with code - provide snippets of code if necessary."
         */}
 
         {/* Display cost breakdown */}
