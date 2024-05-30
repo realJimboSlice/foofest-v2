@@ -409,10 +409,13 @@ const ConfirmationPage = () => {
             onClick={handleResendEmail}
             className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
           >
-            Resend Email
+            Resend Confirmation Email
           </button>
           {emailSent && (
-            <p className="mt-4 text-green-500">Email sent successfully!</p>
+            <p className="mt-4 text-green-500">
+              Email sent successfully! Please check your spam/junk folder if you
+              can&apos;t find it in your inbox.{" "}
+            </p>
           )}
         </div>
       </div>
