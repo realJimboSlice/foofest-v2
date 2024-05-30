@@ -73,36 +73,62 @@ const ConfirmationPage = () => {
 
   const handleDownloadReceipt = () => {
     const doc = new jsPDF();
+    const regularTicketsCost = bookingDetails.regular_ticket * 799;
+    const vipTicketsCost = bookingDetails.vip_ticket * 1299;
+    const twoPeopleTentsCost = bookingDetails.two_person_tent * 299;
+    const threePeopleTentsCost = bookingDetails.three_person_tent * 399;
+    const greenCampingCost = bookingDetails.green_camping ? 295 : 0;
+    const bookingFee = bookingDetails.booking_fee;
+    const totalPrice =
+      regularTicketsCost +
+      vipTicketsCost +
+      twoPeopleTentsCost +
+      threePeopleTentsCost +
+      greenCampingCost +
+      bookingFee;
+
     doc.text("Transaction Receipt", 10, 10);
     doc.text(`Event: Foofest`, 10, 20);
     doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 30);
     doc.text(`Area: ${bookingDetails.area}`, 10, 40);
-    doc.text(`Total Price: ${bookingDetails.total_price} kr`, 10, 50);
-    doc.text(`Regular Tickets: ${bookingDetails.regular_ticket}`, 10, 60);
-    doc.text(`VIP Tickets: ${bookingDetails.vip_ticket}`, 10, 70);
-    doc.text(`2-Person Tents: ${bookingDetails.two_person_tent}`, 10, 80);
-    doc.text(`3-Person Tents: ${bookingDetails.three_person_tent}`, 10, 90);
     doc.text(
-      `Green Camping: ${bookingDetails.green_camping ? "Yes" : "No"}`,
+      `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
       10,
-      100
+      60
     );
-    doc.text(`Booking Fee: ${bookingDetails.booking_fee} kr`, 10, 110);
+    doc.text(
+      `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
+      10,
+      70
+    );
+    doc.text(
+      `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
+      10,
+      80
+    );
+    doc.text(
+      `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+      10,
+      90
+    );
+    doc.text(`Green Camping: ${greenCampingCost} kr`, 10, 100);
+    doc.text(`Booking Fee: ${bookingFee} kr`, 10, 110);
+    doc.text(`Total Price: ${totalPrice} kr`, 10, 120);
     doc.text(
       `Name: ${bookingDetails.first_name} ${bookingDetails.last_name}`,
       10,
-      120
+      130
     );
-    doc.text(`Email: ${bookingDetails.email}`, 10, 130);
+    doc.text(`Email: ${bookingDetails.email}`, 10, 140);
     doc.text(
       `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
       10,
-      140
+      150
     );
     doc.text(
       `Credit Card Number: ${bookingDetails.credit_card_number}`,
       10,
-      150
+      160
     );
     doc.save("Transaction_Receipt.pdf");
   };
