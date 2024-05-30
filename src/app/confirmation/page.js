@@ -15,6 +15,7 @@ const ConfirmationPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [emailAutoSent, setEmailAutoSent] = useState(false);
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
@@ -22,6 +23,13 @@ const ConfirmationPage = () => {
         setErrorMessage("Invalid reservation ID.");
         setIsLoading(false);
         return;
+      }
+
+      // Check if the email has already been sent for this reservation ID
+      const emailSentFlag = localStorage.getItem(`emailSent_${reservationId}`);
+      if (emailSentFlag) {
+        setEmailAutoSent(true);
+        console.log("Auto-email already sent");
       }
 
       try {
@@ -48,6 +56,14 @@ const ConfirmationPage = () => {
     fetchBookingDetails();
   }, [reservationId]);
 
+  useEffect(() => {
+    if (bookingDetails && !emailAutoSent) {
+      sendEmail();
+      setEmailAutoSent(true); // Mark auto-email as sent
+      console.log("Auto-email sent");
+    }
+  }, [bookingDetails, emailAutoSent]);
+
   const generateBarcode = (text) => {
     const canvas = document.createElement("canvas");
     JSBarcode(canvas, text, { format: "CODE128" });
@@ -59,7 +75,7 @@ const ConfirmationPage = () => {
     const barcode = generateBarcode(reservationId);
     doc.text("Foofest Ticket", 10, 10);
     doc.text(`Event: Foofest`, 10, 20);
-    doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 30);
+    doc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 30);
     doc.text(`Area: ${bookingDetails.area}`, 10, 40);
     if (bookingDetails.regular_ticket > 0) {
       doc.text(`Regular Tickets: ${bookingDetails.regular_ticket}`, 10, 50);
@@ -102,7 +118,7 @@ const ConfirmationPage = () => {
     doc.text("Foofest Receipt", 10, 10);
     doc.text(`Booking created: ${bookingDetails.created_at}`, 10, 20);
     doc.text(`Event: Foofest`, 10, 30);
-    doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 40);
+    doc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 40);
     doc.text(`Area: ${bookingDetails.area}`, 10, 50);
     doc.text(
       `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
@@ -144,18 +160,14 @@ const ConfirmationPage = () => {
     console.log("Receipt PDF downloaded");
   };
 
-  const handleResendEmail = async () => {
+  const sendEmail = async () => {
     try {
       // Create Ticket PDF
       const ticketDoc = new jsPDF();
       const barcode = generateBarcode(reservationId);
       ticketDoc.text("Foofest Ticket", 10, 10);
       ticketDoc.text(`Event: Foofest`, 10, 20);
-      ticketDoc.text(
-        `Date: 20th of June 2024 until the 27th of June 2024`,
-        10,
-        30
-      );
+      ticketDoc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 30);
       ticketDoc.text(`Area: ${bookingDetails.area}`, 10, 40);
       if (bookingDetails.regular_ticket > 0) {
         ticketDoc.text(
@@ -214,11 +226,7 @@ const ConfirmationPage = () => {
       receiptDoc.text("Foofest Receipt", 10, 10);
       receiptDoc.text(`Booking created: ${bookingDetails.created_at}`, 10, 20);
       receiptDoc.text(`Event: Foofest`, 10, 30);
-      receiptDoc.text(
-        `Date: 20th of June 2024 until the 27th of June 2024`,
-        10,
-        40
-      );
+      receiptDoc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 40);
       receiptDoc.text(`Area: ${bookingDetails.area}`, 10, 50);
       receiptDoc.text(
         `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
@@ -325,6 +333,11 @@ const ConfirmationPage = () => {
       if (response.ok) {
         setEmailSent(true);
         console.log("Email sent successfully");
+        // Set flag in local storage to indicate email has been sent
+        localStorage.setItem(
+          `emailSent_${bookingDetails.reservation_id}`,
+          "true"
+        );
       } else {
         console.error("Failed to send email");
       }
@@ -372,7 +385,7 @@ const ConfirmationPage = () => {
             <strong>Event:</strong> Foofest
           </p>
           <p>
-            <strong>Date:</strong> 20th of June 2024 until the 27th of June 2024
+            <strong>Date:</strong> 20th of June 2024 - 27th of June 2024
           </p>
           <p>
             <strong>Area:</strong> {area}
@@ -406,7 +419,7 @@ const ConfirmationPage = () => {
             Download Receipt
           </button>
           <button
-            onClick={handleResendEmail}
+            onClick={sendEmail}
             className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
           >
             Resend Confirmation Email
