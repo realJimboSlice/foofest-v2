@@ -252,17 +252,23 @@ const ConfirmationPage = () => {
         10,
         130
       );
-      receiptDoc.text(`Email: ${bookingDetails.email}`, 10, 140);
+      receiptDoc.text(`Country: ${bookingDetails.country}`, 10, 140);
+      receiptDoc.text(`Email: ${bookingDetails.email}`, 10, 150);
       receiptDoc.text(
-        `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
-        10,
-        150
-      );
-      receiptDoc.text(
-        `Credit Card Number: ${bookingDetails.credit_card_number}`,
+        `Paid with ${bookingDetails.credit_card_issuer} ${bookingDetails.credit_card_number}`,
         10,
         160
       );
+      // doc.text(
+      //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
+      //   10,
+      //   160
+      // );
+      // doc.text(
+      //   `Credit Card Number: ${bookingDetails.credit_card_number}`,
+      //   10,
+      //   170
+      // );
       receiptDoc.text(
         `Reservation ID: ${bookingDetails.reservation_id}`,
         10,
@@ -278,14 +284,14 @@ const ConfirmationPage = () => {
           <p>Thank you for booking with Foofest!</p>
           <p>Please find your receipt and ticket enclosed to this email.</p>
           <p>We look forward to seeing you at the event!</p>
-          <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+          <table style="width: 50%; border: 1px solid #ddd; border-collapse: collapse;">
             <tr>
               <th style="border: 1px solid #ddd; padding: 8px;">Booking Status</th>
               <th style="border: 1px solid #ddd; padding: 8px;">Reservation ID</th>
             </tr>
             <tr>
-              <td style="border: 1px solid #ddd; padding: 8px;">Confirmed</td>
-              <td style="border: 1px solid #ddd; padding: 8px;">${bookingDetails.reservation_id}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;"><b><u>Confirmed</u></b></td>
+            <td style="border: 1px solid #ddd; padding: 8px;"><b>${bookingDetails.reservation_id}</b></td>
             </tr>
           </table>
         </div>
