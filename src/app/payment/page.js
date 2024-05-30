@@ -108,7 +108,6 @@ const PaymentPage = () => {
       console.error("Error deleting reservation:", error);
     }
   };
-
   // Define state variable for remaining time
   const [remainingTime, setRemainingTime] = useState(60); // 300 seconds = 5 minutes
 
