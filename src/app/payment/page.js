@@ -110,7 +110,7 @@ const PaymentPage = () => {
   };
 
   // Define state variable for remaining time
-  const [remainingTime, setRemainingTime] = useState(300); // Assuming 300 is the initial remaining time
+  const [remainingTime, setRemainingTime] = useState(300); // 300 seconds = 5 minutes
 
   // Use the useEffect hook for countdown timer
   useEffect(() => {
@@ -125,8 +125,9 @@ const PaymentPage = () => {
         "Session expired. Please start the booking process again."
       );
       deleteReservation(reservationId);
+      router.push("/tickets");
     }
-  }, [remainingTime, reservationId]);
+  }, [remainingTime, reservationId, router]);
 
   // Function to format and mask the card number
   const formatMaskedNumber = (number) => {
