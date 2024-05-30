@@ -130,17 +130,23 @@ const ConfirmationPage = () => {
       10,
       130
     );
-    doc.text(`Email: ${bookingDetails.email}`, 10, 140);
+    doc.text(`Country: ${bookingDetails.country}`, 10, 140);
+    doc.text(`Email: ${bookingDetails.email}`, 10, 150);
     doc.text(
-      `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
-      10,
-      150
-    );
-    doc.text(
-      `Credit Card Number: ${bookingDetails.credit_card_number}`,
+      `Paid with ${bookingDetails.credit_card_issuer} ${bookingDetails.credit_card_number}`,
       10,
       160
     );
+    // doc.text(
+    //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
+    //   10,
+    //   160
+    // );
+    // doc.text(
+    //   `Credit Card Number: ${bookingDetails.credit_card_number}`,
+    //   10,
+    //   170
+    // );
     doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 170);
     doc.save("Transaction_Receipt.pdf");
   };
@@ -212,7 +218,11 @@ const ConfirmationPage = () => {
 
       receiptDoc.text("Foofest Receipt", 10, 10);
       receiptDoc.text(`Event: Foofest`, 10, 20);
-      receiptDoc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 30);
+      receiptDoc.text(
+        `Date: 20th of June 2024 until the 27th of June 2024`,
+        10,
+        30
+      );
       receiptDoc.text(`Area: ${bookingDetails.area}`, 10, 40);
       receiptDoc.text(
         `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
@@ -260,7 +270,45 @@ const ConfirmationPage = () => {
       );
       const receiptPdfString = receiptDoc.output("datauristring");
 
-      // Send email with both attachments
+      // Prepare HTML content for the email
+      const htmlContent = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+          <h1>Your booking has been confirmed!</h1>
+          <p>Hello ${bookingDetails.first_name},</p>
+          <p>Thank you for booking with Foofest!</p>
+          <p>Please find your receipt and ticket enclosed to this email.</p>
+          <p>We look forward to seeing you at the event!</p>
+          <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse;">
+            <tr>
+              <th style="border: 1px solid #ddd; padding: 8px;">Booking Status</th>
+              <th style="border: 1px solid #ddd; padding: 8px;">Reservation ID</th>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 8px;">Confirmed</td>
+              <td style="border: 1px solid #ddd; padding: 8px;">${bookingDetails.reservation_id}</td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      // Prepare plain text content for the email
+      const textContent = `
+        Your booking has been confirmed!
+  
+        Hello ${bookingDetails.first_name},
+  
+        Thank you for booking with Foofest!
+  
+        Please find your receipt and ticket enclosed to this email.
+
+        We look forward to seeing you at the event!
+  
+        Booking Status: Confirmed
+        Reservation ID: ${bookingDetails.reservation_id}
+  
+      `;
+
+      // Send email with both attachments and the HTML and text content
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -269,7 +317,8 @@ const ConfirmationPage = () => {
         body: JSON.stringify({
           email: bookingDetails.email,
           subject: "Your Foofest Booking Confirmation",
-          text: "Your booking has been confirmed. Please find the details attached.",
+          text: textContent,
+          html: htmlContent,
           attachments: [
             { filename: "Foofest_Ticket.pdf", content: ticketPdfString },
             { filename: "Foofest_Receipt.pdf", content: receiptPdfString },
