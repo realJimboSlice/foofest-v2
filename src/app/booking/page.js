@@ -18,7 +18,8 @@ const BookingForm = () => {
 
   // Initialize form handling using react-hook-form
   const {
-    register, // Registers input elements with react-hook-form
+    register,
+    getValues, // Registers input elements with react-hook-form
     handleSubmit, // Handles form submission
     watch, // Watches form inputs for changes
     control, // Controls input elements for non-standard inputs
@@ -428,6 +429,33 @@ const BookingForm = () => {
           {/* Display error if email is missing */}
           {errors.email && (
             <span className="text-red-500 text-sm">Email is required</span>
+          )}
+        </div>
+
+        {/* Confirmation Email input */}
+        <div className="flex flex-col">
+          <label htmlFor="confirmEmail" className="mb-2">
+            Confirm E-mail
+          </label>
+          <input
+            type="email"
+            id="confirmEmail"
+            {...register("confirmEmail", {
+              required: "Confirmation Email is required",
+              validate: {
+                matchesPreviousEmail: (value) => {
+                  const { email } = getValues();
+                  return email === value || "Emails should match!";
+                },
+              },
+            })}
+            className="p-2 border rounded"
+          />
+          {/* Display error if confirmation email is missing or doesn't match */}
+          {errors.confirmEmail && (
+            <span className="text-red-500 text-sm">
+              {errors.confirmEmail.message}
+            </span>
           )}
         </div>
 
