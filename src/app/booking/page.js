@@ -561,7 +561,13 @@ const BookingForm = () => {
           <input
             type="text"
             id="city"
-            {...register("city", { required: true })}
+            {...register("city", {
+              required: true,
+              pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: "Only letters are allowed",
+              },
+            })}
             className="p-2 border rounded"
           />
           {/* Display error if city is missing */}

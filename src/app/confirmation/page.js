@@ -7,10 +7,10 @@ import supabase from "../../lib/supabaseClient";
 import jsPDF from "jspdf";
 import JSBarcode from "jsbarcode";
 
+// Define the ConfirmationPage component
 const ConfirmationPage = () => {
   const searchParams = useSearchParams();
   const reservationId = searchParams.get("reservationId");
-
   const [bookingDetails, setBookingDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
