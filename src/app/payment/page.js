@@ -68,6 +68,15 @@ const PaymentPage = () => {
           greenCampingCost: data.green_camping ? 295 : 0,
           bookingFee: data.booking_fee,
         });
+        // Retrieve created_at from localStorage
+        const createdAt = localStorage.getItem("createdAt");
+        if (createdAt) {
+          const createdAtTime = new Date(createdAt).getTime();
+          const currentTime = new Date().getTime();
+          const elapsedTime = Math.floor((currentTime - createdAtTime) / 1000);
+          const remaining = 300 - elapsedTime;
+          setRemainingTime(remaining > 0 ? remaining : 0);
+        }
       } catch (error) {
         // If there's an error, log it and set the error message state variable
         console.error(error.message);
@@ -81,6 +90,24 @@ const PaymentPage = () => {
     // Call the fetchBookingDetails function
     fetchBookingDetails();
   }, [reservationId]); // Only re-run the effect if reservationId changes
+
+  // Define state variable for remaining time
+  const [remainingTime, setRemainingTime] = useState(300); // Assuming 300 is the initial remaining time
+
+  // Use the useEffect hook for countdown timer
+  useEffect(() => {
+    if (remainingTime > 0) {
+      const timer = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else {
+      // Handle timer expiry
+      setErrorMessage(
+        "Session expired. Please start the booking process again."
+      );
+    }
+  }, [remainingTime]); // Now remainingTime is a valid dependency
 
   // Function to format and mask the card number
   const formatMaskedNumber = (number) => {
@@ -271,6 +298,10 @@ const PaymentPage = () => {
               Pay {totalAmount} kr
             </button>
           </form>
+        </div>
+        <div className="text-red-500 mt-4">
+          Time remaining: {Math.floor(remainingTime / 60)}:
+          {("0" + (remainingTime % 60)).slice(-2)} minutes
         </div>
       </div>
     </div>

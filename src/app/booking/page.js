@@ -120,6 +120,11 @@ const BookingForm = () => {
         // router.push("/payment"); // Navigate to the payment page
         console.log("Data inserted successfully");
 
+        // Store the reservation ID and created_at timestamp in localStorage
+        const createdAt = new Date().toISOString();
+        localStorage.setItem("reservationId", reservationId);
+        localStorage.setItem("createdAt", createdAt);
+
         // // Create a URLSearchParams object
         // const params = new URLSearchParams({
         //   totalAmount: totalAmount.toString(),
