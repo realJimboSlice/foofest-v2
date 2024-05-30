@@ -14,6 +14,7 @@ const ConfirmationPage = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
@@ -144,6 +145,148 @@ const ConfirmationPage = () => {
     doc.save("Transaction_Receipt.pdf");
   };
 
+  const handleResendEmail = async () => {
+    try {
+      // Create Ticket PDF
+      const ticketDoc = new jsPDF();
+      const barcode = generateBarcode(reservationId);
+      ticketDoc.text("Foofest Ticket", 10, 10);
+      ticketDoc.text(`Event: Foofest`, 10, 20);
+      ticketDoc.text(
+        `Date: 20th of June 2024 until the 27th of June 2024`,
+        10,
+        30
+      );
+      ticketDoc.text(`Area: ${bookingDetails.area}`, 10, 40);
+      if (bookingDetails.regular_ticket > 0) {
+        ticketDoc.text(
+          `Regular Tickets: ${bookingDetails.regular_ticket}`,
+          10,
+          50
+        );
+      }
+      if (bookingDetails.vip_ticket > 0) {
+        ticketDoc.text(`VIP Tickets: ${bookingDetails.vip_ticket}`, 10, 60);
+      }
+      if (bookingDetails.two_person_tent > 0) {
+        ticketDoc.text(
+          `2-Person Tents: ${bookingDetails.two_person_tent}`,
+          10,
+          70
+        );
+      }
+      if (bookingDetails.three_person_tent > 0) {
+        ticketDoc.text(
+          `3-Person Tents: ${bookingDetails.three_person_tent}`,
+          10,
+          80
+        );
+      }
+      if (bookingDetails.green_camping) {
+        ticketDoc.text(`Green Camping: Yes`, 10, 90);
+      }
+      ticketDoc.text("Bring this ticket to the event entrance.", 10, 100);
+      ticketDoc.text(
+        `Reservation ID: ${bookingDetails.reservation_id}`,
+        10,
+        110
+      );
+      ticketDoc.addImage(barcode, "PNG", 10, 120, 100, 40);
+      const ticketPdfString = ticketDoc.output("datauristring");
+
+      // Create Receipt PDF
+      const receiptDoc = new jsPDF();
+      const regularTicketsCost = bookingDetails.regular_ticket * 799;
+      const vipTicketsCost = bookingDetails.vip_ticket * 1299;
+      const twoPeopleTentsCost = bookingDetails.two_person_tent * 299;
+      const threePeopleTentsCost = bookingDetails.three_person_tent * 399;
+      const greenCampingCost = bookingDetails.green_camping ? 295 : 0;
+      const bookingFee = bookingDetails.booking_fee;
+      const totalPrice =
+        regularTicketsCost +
+        vipTicketsCost +
+        twoPeopleTentsCost +
+        threePeopleTentsCost +
+        greenCampingCost +
+        bookingFee;
+
+      receiptDoc.text("Foofest Receipt", 10, 10);
+      receiptDoc.text(`Event: Foofest`, 10, 20);
+      receiptDoc.text(`Date: 20th of June 2024 - 27th of June 2024`, 10, 30);
+      receiptDoc.text(`Area: ${bookingDetails.area}`, 10, 40);
+      receiptDoc.text(
+        `Regular Tickets (${bookingDetails.regular_ticket} x 799 kr): ${regularTicketsCost} kr`,
+        10,
+        60
+      );
+      receiptDoc.text(
+        `VIP Tickets (${bookingDetails.vip_ticket} x 1299 kr): ${vipTicketsCost} kr`,
+        10,
+        70
+      );
+      receiptDoc.text(
+        `2-Person Tents (${bookingDetails.two_person_tent} x 299 kr): ${twoPeopleTentsCost} kr`,
+        10,
+        80
+      );
+      receiptDoc.text(
+        `3-Person Tents (${bookingDetails.three_person_tent} x 399 kr): ${threePeopleTentsCost} kr`,
+        10,
+        90
+      );
+      receiptDoc.text(`Green Camping: ${greenCampingCost} kr`, 10, 100);
+      receiptDoc.text(`Booking Fee: ${bookingFee} kr`, 10, 110);
+      receiptDoc.text(`Total Price: ${totalPrice} kr`, 10, 120);
+      receiptDoc.text(
+        `Name: ${bookingDetails.first_name} ${bookingDetails.last_name}`,
+        10,
+        130
+      );
+      receiptDoc.text(`Email: ${bookingDetails.email}`, 10, 140);
+      receiptDoc.text(
+        `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
+        10,
+        150
+      );
+      receiptDoc.text(
+        `Credit Card Number: ${bookingDetails.credit_card_number}`,
+        10,
+        160
+      );
+      receiptDoc.text(
+        `Reservation ID: ${bookingDetails.reservation_id}`,
+        10,
+        170
+      );
+      const receiptPdfString = receiptDoc.output("datauristring");
+
+      // Send email with both attachments
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: bookingDetails.email,
+          subject: "Your Foofest Booking Confirmation",
+          text: "Your booking has been confirmed. Please find the details attached.",
+          attachments: [
+            { filename: "Foofest_Ticket.pdf", content: ticketPdfString },
+            { filename: "Foofest_Receipt.pdf", content: receiptPdfString },
+          ],
+        }),
+      });
+
+      if (response.ok) {
+        setEmailSent(true);
+      } else {
+        console.error("Failed to send email");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -216,6 +359,15 @@ const ConfirmationPage = () => {
           >
             Download Receipt
           </button>
+          <button
+            onClick={handleResendEmail}
+            className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+          >
+            Resend Email
+          </button>
+          {emailSent && (
+            <p className="mt-4 text-green-500">Email sent successfully!</p>
+          )}
         </div>
       </div>
     </div>
