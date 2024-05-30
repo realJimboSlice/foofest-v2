@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabaseClient";
 import jsPDF from "jspdf";
+import JSBarcode from "jsbarcode";
 
 const ConfirmationPage = () => {
   const searchParams = useSearchParams();
@@ -46,8 +47,15 @@ const ConfirmationPage = () => {
     fetchBookingDetails();
   }, [reservationId]);
 
+  const generateBarcode = (text) => {
+    const canvas = document.createElement("canvas");
+    JSBarcode(canvas, text, { format: "CODE128" });
+    return canvas.toDataURL("image/png");
+  };
+
   const handleDownloadTicket = () => {
     const doc = new jsPDF();
+    const barcode = generateBarcode(reservationId);
     doc.text("Foofest Ticket", 10, 10);
     doc.text(`Event: Foofest`, 10, 20);
     doc.text(`Date: 20th of June 2024 until the 27th of June 2024`, 10, 30);
@@ -68,6 +76,8 @@ const ConfirmationPage = () => {
       doc.text(`Green Camping: Yes`, 10, 90);
     }
     doc.text("Bring this ticket to the event entrance.", 10, 100);
+    doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 110);
+    doc.addImage(barcode, "PNG", 10, 120, 100, 40);
     doc.save("Foofest_Ticket.pdf");
   };
 
@@ -130,6 +140,7 @@ const ConfirmationPage = () => {
       10,
       160
     );
+    doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 170);
     doc.save("Transaction_Receipt.pdf");
   };
 
