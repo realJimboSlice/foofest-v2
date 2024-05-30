@@ -30,7 +30,7 @@ const ConfirmationPage = () => {
           .select("*")
           .eq("reservation_id", reservationId)
           .single();
-        console.log(data);
+        console.log("Fetched booking details:", data);
 
         if (error || !data) {
           throw new Error("Error fetching booking data.");
@@ -38,7 +38,7 @@ const ConfirmationPage = () => {
 
         setBookingDetails(data);
       } catch (error) {
-        console.error(error.message);
+        console.error("Error fetching booking details:", error.message);
         setErrorMessage(error.message);
       } finally {
         setIsLoading(false);
@@ -80,6 +80,7 @@ const ConfirmationPage = () => {
     doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 110);
     doc.addImage(barcode, "PNG", 10, 120, 100, 40);
     doc.save("Foofest_Ticket.pdf");
+    console.log("Ticket PDF downloaded");
   };
 
   const handleDownloadReceipt = () => {
@@ -138,18 +139,9 @@ const ConfirmationPage = () => {
       10,
       170
     );
-    // doc.text(
-    //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
-    //   10,
-    //   160
-    // );
-    // doc.text(
-    //   `Credit Card Number: ${bookingDetails.credit_card_number}`,
-    //   10,
-    //   170
-    // );
     doc.text(`Reservation ID: ${bookingDetails.reservation_id}`, 10, 180);
     doc.save("Transaction_Receipt.pdf");
+    console.log("Receipt PDF downloaded");
   };
 
   const handleResendEmail = async () => {
@@ -200,6 +192,8 @@ const ConfirmationPage = () => {
       );
       ticketDoc.addImage(barcode, "PNG", 10, 120, 100, 40);
       const ticketPdfString = ticketDoc.output("datauristring");
+
+      console.log("Ticket PDF generated");
 
       // Create Receipt PDF
       const receiptDoc = new jsPDF();
@@ -261,22 +255,14 @@ const ConfirmationPage = () => {
         10,
         170
       );
-      // doc.text(
-      //   `Credit Card Issuer: ${bookingDetails.credit_card_issuer}`,
-      //   10,
-      //   160
-      // );
-      // doc.text(
-      //   `Credit Card Number: ${bookingDetails.credit_card_number}`,
-      //   10,
-      //   170
-      // );
       receiptDoc.text(
         `Reservation ID: ${bookingDetails.reservation_id}`,
         10,
         180
       );
       const receiptPdfString = receiptDoc.output("datauristring");
+
+      console.log("Receipt PDF generated");
 
       // Prepare HTML content for the email
       const htmlContent = `
@@ -316,6 +302,8 @@ const ConfirmationPage = () => {
   
       `;
 
+      console.log("Prepared email content");
+
       // Send email with both attachments and the HTML and text content
       const response = await fetch("/api/sendEmail", {
         method: "POST",
@@ -336,6 +324,7 @@ const ConfirmationPage = () => {
 
       if (response.ok) {
         setEmailSent(true);
+        console.log("Email sent successfully");
       } else {
         console.error("Failed to send email");
       }
@@ -371,11 +360,11 @@ const ConfirmationPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-black">
       <h1 className="text-4xl font-bold mb-8">
-        Congratulations, you've completed your booking!
+        Congratulations, you&apos;ve completed your booking!
       </h1>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-lg space-y-4">
         <h2 className="text-2xl font-bold mb-4 text-black">
-          Below you'll find your confirmation. It has also been sent to the
+          Below you&apos;ll find your confirmation. It has also been sent to the
           email you provided along with the receipt for the transaction.
         </h2>
         <div className="space-y-2 text-black" id="ticket-content">
