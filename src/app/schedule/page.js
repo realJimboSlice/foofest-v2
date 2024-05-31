@@ -53,6 +53,7 @@ const SchedulePage = () => {
             slot.logo = band.logo.includes("https")
               ? band.logo
               : `https://fluffy-scrawny-hedgehog.glitch.me/logos/${band.logo}`;
+            slot.slug = band.slug;
           }
 
           scheduleByTimeSlot[key].push({ ...slot, stage });
