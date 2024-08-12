@@ -1,5 +1,4 @@
-// Email functionality using Nodemailer and SMTP2GO - with some help from ChatGPT 4.0.
-// Used GPT to give me suggestions on what ot look for.
+// Email functionality using Nodemailer and SMTP2GO - with assistance from from ChatGPT 4.0
 
 import nodemailer from "nodemailer";
 
