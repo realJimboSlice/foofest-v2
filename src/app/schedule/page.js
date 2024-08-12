@@ -65,12 +65,16 @@ const SchedulePage = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen bg-black text-white p-4">
+      {/* Navigation */}
       <Navigation
         days={days}
         selectedDay={selectedDay}
         onDayClick={setSelectedDay}
+        className="mb-8"
       />
+
+      {/* Schedule Grid */}
       <ScheduleGrid schedule={getFilteredSchedule(selectedDay)} />
     </div>
   );

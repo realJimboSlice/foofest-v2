@@ -11,14 +11,10 @@ import Payment from "payment";
 
 // Define the PaymentPage component
 const PaymentPage = () => {
-  // Use the useRouter hook to get the router object
   const router = useRouter();
-  // Use the useSearchParams hook to get the URL search parameters
   const searchParams = useSearchParams();
-  // Extract the reservationId from the search parameters
   const reservationId = searchParams.get("reservationId");
 
-  // Define state variables for total amount, breakdown, loading status, error message, and credit card details
   const [totalAmount, setTotalAmount] = useState(0);
   const [breakdown, setBreakdown] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -26,19 +22,15 @@ const PaymentPage = () => {
   const [focus, setFocus] = useState("");
   const [issuer, setIssuer] = useState("");
 
-  // Initialize react-hook-form
   const { register, handleSubmit, setValue, watch } = useForm();
 
-  // Watch form values for credit card fields
   const number = watch("number", "");
   const name = watch("name", "");
   const expiry = watch("expiry", "");
   const cvc = watch("cvc", "");
 
-  // Use the useEffect hook to fetch booking details when the component mounts
   useEffect(() => {
     const fetchBookingDetails = async () => {
-      // If the reservationId is not present, set an error message and stop loading
       if (!reservationId) {
         setErrorMessage("Invalid reservation ID.");
         setIsLoading(false);
@@ -46,19 +38,16 @@ const PaymentPage = () => {
       }
 
       try {
-        // Fetch booking details from Supabase using the reservation ID
         const { data, error } = await supabase
           .from("bookings")
           .select("*")
           .eq("reservation_id", reservationId)
           .single();
 
-        // If there's an error or no data, throw an error
         if (error || !data) {
           throw new Error("Error fetching booking data.");
         }
 
-        // Set the total amount and breakdown state variables with the fetched data
         setTotalAmount(data.amount_paid.totalAmount);
         setBreakdown({
           regularTicketsCost: data.regular_ticket * 799,
@@ -68,7 +57,7 @@ const PaymentPage = () => {
           greenCampingCost: data.green_camping ? 295 : 0,
           bookingFee: data.booking_fee,
         });
-        // Retrieve created_at from localStorage
+
         const createdAt = localStorage.getItem("createdAt");
         if (createdAt) {
           const createdAtTime = new Date(createdAt).getTime();
@@ -78,18 +67,15 @@ const PaymentPage = () => {
           setRemainingTime(remaining > 0 ? remaining : 0);
         }
       } catch (error) {
-        // If there's an error, log it and set the error message state variable
         console.error(error.message);
         setErrorMessage(error.message);
       } finally {
-        // Stop loading when the fetch is complete
         setIsLoading(false);
       }
     };
 
-    // Call the fetchBookingDetails function
     fetchBookingDetails();
-  }, [reservationId]); // Only re-run the effect if reservationId changes
+  }, [reservationId]);
 
   const deleteReservation = async (reservationId) => {
     try {
@@ -102,16 +88,15 @@ const PaymentPage = () => {
         console.error("Error deleting reservation:", error);
       } else {
         console.log("Reservation deleted successfully.");
-        // Provide navigation here to the tickets page
+        router.push("/tickets");
       }
     } catch (error) {
       console.error("Error deleting reservation:", error);
     }
   };
-  // Define state variable for remaining time
-  const [remainingTime, setRemainingTime] = useState(60); // 300 seconds = 5 minutes
 
-  // Use the useEffect hook for countdown timer
+  const [remainingTime, setRemainingTime] = useState(60);
+
   useEffect(() => {
     if (remainingTime > 0) {
       const timer = setInterval(() => {
@@ -119,32 +104,24 @@ const PaymentPage = () => {
       }, 1000);
       return () => clearInterval(timer);
     } else {
-      // Handle timer expiry
       setErrorMessage(
         "Session expired. Please start the booking process again."
       );
       deleteReservation(reservationId);
-      router.push("/tickets");
     }
   }, [remainingTime, reservationId, router]);
 
-  // Function to format and mask the card number
   const formatMaskedNumber = (number) => {
-    // Remove all spaces and hyphens from the number
     const cleanNumber = number.replace(/\s|-/g, "");
-
-    // Determine how many digits to retain
     const retainLength = Math.ceil(cleanNumber.length / 2);
     const retainedPart = cleanNumber.slice(0, retainLength);
     const maskedPart = "X".repeat(cleanNumber.length - retainLength);
-
-    // Combine the retained and masked parts
     return retainedPart + maskedPart;
   };
 
   const handleExpiryInput = (event) => {
     const input = event.target;
-    let value = input.value.replace(/\D/g, ""); // Remove non-digit characters
+    let value = input.value.replace(/\D/g, "");
 
     if (value.length >= 2) {
       let month = value.slice(0, 2);
@@ -171,27 +148,22 @@ const PaymentPage = () => {
 
   const handleCVCInput = (event) => {
     const input = event.target;
-    input.value = input.value.replace(/\D/g, "").slice(0, 3); // Only allow up to 3 digits
+    input.value = input.value.replace(/\D/g, "").slice(0, 3);
   };
 
   const onSubmit = async (data) => {
-    // Determine the length of the card number and mask the remaining digits
     const maskedNumber = formatMaskedNumber(number);
-
-    // Card issuer (e.g., VISA, MASTERCARD, etc.) in uppercase
     const cardIssuer = issuer
       .split(" ")
       .map((word) => word.toUpperCase())
       .join(" ");
 
-    // Prepare the data to be sent to Supabase
     const cardData = {
       credit_card_issuer: cardIssuer,
       credit_card_number: maskedNumber,
     };
 
     try {
-      // Update the booking record in Supabase with the card data
       const { error } = await supabase
         .from("bookings")
         .update(cardData)
@@ -203,7 +175,6 @@ const PaymentPage = () => {
 
       console.log("Payment data saved successfully.");
 
-      // Send a POST request to the specified URL
       const response = await fetch(
         "https://fluffy-scrawny-hedgehog.glitch.me/fullfill-reservation",
         {
@@ -231,7 +202,6 @@ const PaymentPage = () => {
     }
   };
 
-  // Update issuer based on card number
   useEffect(() => {
     if (number) {
       const cardType = Payment.fns.cardType(number);
@@ -239,7 +209,6 @@ const PaymentPage = () => {
     }
   }, [number]);
 
-  // Render loading, error, or the payment page based on the state
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -249,9 +218,9 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
       <h1 className="text-4xl font-bold mb-8">Payment</h1>
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-lg space-y-4">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-4">
         <h2 className="text-2xl font-bold mb-4">
           Total Amount: {totalAmount} kr
         </h2>
@@ -285,7 +254,7 @@ const PaymentPage = () => {
             issuer={issuer}
           />
           <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3 text-black">
+            <div className="mb-3">
               <input
                 type="tel"
                 name="number"
@@ -293,10 +262,10 @@ const PaymentPage = () => {
                 {...register("number")}
                 onFocus={(e) => setFocus(e.target.name)}
                 maxLength={19}
-                className="p-2 border rounded w-full"
+                className="p-2 border rounded w-full bg-gray-700 text-white"
               />
             </div>
-            <div className="mb-3 text-black">
+            <div className="mb-3">
               <input
                 type="text"
                 name="name"
@@ -304,10 +273,10 @@ const PaymentPage = () => {
                 {...register("name")}
                 onFocus={(e) => setFocus(e.target.name)}
                 maxLength={26}
-                className="p-2 border rounded w-full"
+                className="p-2 border rounded w-full bg-gray-700 text-white"
               />
             </div>
-            <div className="mb-3 text-black">
+            <div className="mb-3">
               <input
                 type="tel"
                 name="expiry"
@@ -318,10 +287,10 @@ const PaymentPage = () => {
                 value={expiry}
                 pattern="\d{2}/\d{2}"
                 maxLength={5}
-                className="p-2 border rounded w-full"
+                className="p-2 border rounded w-full bg-gray-700 text-white"
               />
             </div>
-            <div className="mb-3 text-black">
+            <div className="mb-3">
               <input
                 type="tel"
                 name="cvc"
@@ -330,18 +299,18 @@ const PaymentPage = () => {
                 onFocus={(e) => setFocus(e.target.name)}
                 onInput={handleCVCInput}
                 maxLength={3}
-                className="p-2 border rounded w-full"
+                className="p-2 border rounded w-full bg-gray-700 text-white"
               />
             </div>
             <button
               type="submit"
-              className="px-6 py-3 bg-green-500 hover:bg-green-700 text-white rounded"
+              className="px-6 py-3 bg-electricBlue hover:bg-deepRed text-white rounded font-semibold transition-colors duration-300 w-full"
             >
               Pay {totalAmount} kr
             </button>
           </form>
         </div>
-        <div className="text-red-500 mt-4">
+        <div className="text-red-500 mt-4 text-center">
           Time remaining: {Math.floor(remainingTime / 60)}:
           {("0" + (remainingTime % 60)).slice(-2)} minutes
         </div>

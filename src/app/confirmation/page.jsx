@@ -25,7 +25,6 @@ const ConfirmationPage = () => {
         return;
       }
 
-      // Check if the email has already been sent for this reservation ID
       const emailSentFlag = localStorage.getItem(`emailSent_${reservationId}`);
       if (emailSentFlag) {
         setEmailAutoSent(true);
@@ -59,7 +58,7 @@ const ConfirmationPage = () => {
   useEffect(() => {
     if (bookingDetails && !emailAutoSent) {
       sendEmail();
-      setEmailAutoSent(true); // Mark auto-email as sent
+      setEmailAutoSent(true);
       console.log("Auto-email sent");
     }
   }, [bookingDetails, emailAutoSent]);
@@ -162,7 +161,6 @@ const ConfirmationPage = () => {
 
   const sendEmail = async () => {
     try {
-      // Create Ticket PDF
       const ticketDoc = new jsPDF();
       const barcode = generateBarcode(reservationId);
       ticketDoc.text("Foofest Ticket", 10, 10);
@@ -207,7 +205,6 @@ const ConfirmationPage = () => {
 
       console.log("Ticket PDF generated");
 
-      // Create Receipt PDF
       const receiptDoc = new jsPDF();
       const regularTicketsCost = bookingDetails.regular_ticket * 799;
       const vipTicketsCost = bookingDetails.vip_ticket * 1299;
@@ -272,7 +269,6 @@ const ConfirmationPage = () => {
 
       console.log("Receipt PDF generated");
 
-      // Prepare HTML content for the email
       const htmlContent = `
         <div style="font-family: Arial, sans-serif; line-height: 1.5;">
           <h1>Your booking has been confirmed!</h1>
@@ -293,7 +289,6 @@ const ConfirmationPage = () => {
         </div>
       `;
 
-      // Prepare plain text content for the email
       const textContent = `
         Your booking has been confirmed!
   
@@ -312,7 +307,6 @@ const ConfirmationPage = () => {
 
       console.log("Prepared email content");
 
-      // Send email with both attachments and the HTML and text content
       const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
@@ -333,7 +327,6 @@ const ConfirmationPage = () => {
       if (response.ok) {
         setEmailSent(true);
         console.log("Email sent successfully");
-        // Set flag in local storage to indicate email has been sent
         localStorage.setItem(
           `emailSent_${bookingDetails.reservation_id}`,
           "true"
@@ -361,26 +354,19 @@ const ConfirmationPage = () => {
     two_person_tent,
     three_person_tent,
     green_camping,
-    booking_fee,
-    total_price,
-    first_name,
-    last_name,
-    email,
-    credit_card_issuer,
-    credit_card_number,
   } = bookingDetails;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-black">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
       <h1 className="text-4xl font-bold mb-8">
         Congratulations, you&apos;ve completed your booking!
       </h1>
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-lg space-y-4">
-        <h2 className="text-2xl font-bold mb-4 text-black">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-4">
+        <h2 className="text-2xl font-bold mb-4">
           Below you&apos;ll find your confirmation. It has also been sent to the
           email you provided along with the receipt for the transaction.
         </h2>
-        <div className="space-y-2 text-black" id="ticket-content">
+        <div className="space-y-2" id="ticket-content">
           <p>
             <strong>Event:</strong> Foofest
           </p>
@@ -408,19 +394,19 @@ const ConfirmationPage = () => {
           </p>
           <button
             onClick={handleDownloadTicket}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+            className="mt-4 px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
           >
             Download Ticket
           </button>
           <button
             onClick={handleDownloadReceipt}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            className="mt-4 px-4 py-2 bg-electricBlue hover:bg-deepRed text-white rounded"
           >
             Download Receipt
           </button>
           <button
             onClick={sendEmail}
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+            className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded"
           >
             Resend Confirmation Email
           </button>

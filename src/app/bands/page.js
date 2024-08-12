@@ -1,44 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// GitHub Copilot Assistance:
-// Adding comments to the code for increased readability and understanding
-
-// This function fetches band data from a specific URL
+// Function to fetch band data
 async function fetchBands() {
-  // Fetch data from the URL
   const res = await fetch("https://fluffy-scrawny-hedgehog.glitch.me/bands");
-  // Parse the response to JSON
   const bands = await res.json();
-  // Return the parsed data
   return bands;
 }
 
-// This is the main function that fetches the band data and renders it
+// Main function to render the lineup page
 export default async function Lineup() {
   // Fetch the band data
   const bands = await fetchBands();
 
-  // Return the JSX that renders the band data
+  // Render the band data
   return (
-    <article className="">
-      <div className="">
+    <article className="min-h-screen bg-black text-white p-4">
+      <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">
+        Band Lineup
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {/* Map over the band data and render each band */}
         {bands.map((band) => (
-          <div key={band.slug} className="">
-            <div className="">
-              {/* Link to the band's page */}
-              <Link href={`/bands/${band.slug}`}>
-                {/* Display the band's name */}
-                <span className="">{band.name}</span>
-              </Link>
-              {/* Link to the band's page */}
-              <Link href={`/bands/${band.slug}`}>
-                {/* Display the band's logo */}
+          <div
+            key={band.slug}
+            className="bg-gray-900 rounded-lg p-4 flex flex-col items-center justify-between"
+          >
+            {/* Band Logo */}
+            <Link href={`/bands/${band.slug}`} className="mb-4">
+              <div className="w-24 h-24 flex items-center justify-center overflow-hidden rounded-full bg-black">
                 <Image
                   src={
-                    // Check if band.logo is a link.
-                    // If not, fetch it from the folder.
                     band.logo.includes("https")
                       ? band.logo
                       : `https://fluffy-scrawny-hedgehog.glitch.me/logos/${band.logo}`
@@ -46,11 +38,19 @@ export default async function Lineup() {
                   alt={band.name}
                   width={100}
                   height={100}
+                  className="object-contain"
                 />
-              </Link>
-              {/* Display the logo credits */}
-              <span className="">{band.logoCredits}</span>
-            </div>
+              </div>
+            </Link>
+            {/* Band Name */}
+            <Link
+              href={`/bands/${band.slug}`}
+              className="text-xl font-bold text-electricBlue hover:text-deepRed mb-2 text-center"
+            >
+              {band.name}
+            </Link>
+            {/* Logo Credits */}
+            {/* <span className="text-sm text-gray-400">{band.logoCredits}</span> */}
           </div>
         ))}
       </div>
