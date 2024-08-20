@@ -11,7 +11,7 @@ export default function Home() {
       <div className="w-full flex justify-center px-4 md:px-12 lg:px-24">
         <div className="relative w-full">
           <Image
-            src="/assets/images/foofest-hero.webp"
+            src="/assets/images/foofest-hero-fade.webp"
             alt="Metal Festival Banner"
             width={1920}
             height={1080}
