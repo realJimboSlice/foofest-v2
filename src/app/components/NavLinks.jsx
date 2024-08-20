@@ -16,8 +16,8 @@ const NavLinks = ({ isClicked, closeMenu }) => {
           </Link>
         </li>
         <li>
-          <Link href="/Lineup" onClick={isClicked ? closeMenu : null}>
-            BANDS
+          <Link href="/bands" onClick={isClicked ? closeMenu : null}>
+            LINE-UP
           </Link>
         </li>
       </ul>
