@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import CountrySelect from "../components/countrySelect";
 import supabase from "../../lib/supabaseClient";
 
-const BookingForm = () => {
+const BookingFormContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const area = searchParams.get("area");
@@ -505,5 +505,11 @@ const BookingForm = () => {
     </div>
   );
 };
+
+const BookingForm = () => (
+  <Suspense fallback={<div>Loading booking details...</div>}>
+    <BookingFormContent />
+  </Suspense>
+);
 
 export default BookingForm;

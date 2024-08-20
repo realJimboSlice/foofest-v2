@@ -2,13 +2,13 @@
 
 // Import necessary hooks and utilities
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import supabase from "../../lib/supabaseClient";
 import jsPDF from "jspdf";
 import JSBarcode from "jsbarcode";
 
 // Define the ConfirmationPage component
-const ConfirmationPage = () => {
+const ConfirmationPageContent = () => {
   const searchParams = useSearchParams();
   const reservationId = searchParams.get("reservationId");
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -421,5 +421,11 @@ const ConfirmationPage = () => {
     </div>
   );
 };
+
+const ConfirmationPage = () => (
+  <Suspense fallback={<div>Loading booking details...</div>}>
+    <ConfirmationPageContent />
+  </Suspense>
+);
 
 export default ConfirmationPage;

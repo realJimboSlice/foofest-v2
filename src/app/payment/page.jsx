@@ -2,7 +2,7 @@
 
 // Import necessary hooks and utilities
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import supabase from "../../lib/supabaseClient";
 import CreditCard from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import Payment from "payment";
 
 // Define the PaymentPage component
-const PaymentPage = () => {
+const PaymentPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reservationId = searchParams.get("reservationId");
@@ -318,5 +318,11 @@ const PaymentPage = () => {
     </div>
   );
 };
+
+const PaymentPage = () => (
+  <Suspense fallback={<div>Loading booking details...</div>}>
+    <PaymentPageContent />
+  </Suspense>
+);
 
 export default PaymentPage;
