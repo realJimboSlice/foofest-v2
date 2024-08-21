@@ -18,7 +18,7 @@ const CountrySelect = ({ value, onChange }) => {
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "#FFFFFF", // White text color for selected value
+      color: "#000000", // White text color for selected value
     }),
     menu: (provided) => ({
       ...provided,
