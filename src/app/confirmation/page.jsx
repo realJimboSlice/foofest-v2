@@ -4,6 +4,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import supabase from "../../lib/supabaseClient";
+import Head from "next/head";
 import jsPDF from "jspdf";
 import JSBarcode from "jsbarcode";
 
@@ -357,11 +358,11 @@ const ConfirmationPageContent = () => {
   } = bookingDetails;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <h1 className="text-4xl font-bold mb-8">
-        Congratulations, you&apos;ve completed your booking!
-      </h1>
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-4">
+    <div className="flex flex-col lg:flex-row items-start justify-center min-h-screen bg-black text-white pt-36">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg lg:w-2/3 space-y-4 lg:mr-8">
+        <h1 className="text-4xl font-bold mb-8">
+          Congratulations, you&apos;ve completed your booking!
+        </h1>
         <h2 className="text-2xl font-bold mb-4">
           Below you&apos;ll find your confirmation. It has also been sent to the
           email you provided along with the receipt for the transaction.
@@ -382,38 +383,32 @@ const ConfirmationPageContent = () => {
           {three_person_tent > 0 && <p>3-Person Tents: {three_person_tent}</p>}
           {green_camping && <p>Green Camping: Yes</p>}
         </div>
-        <div className="mt-8">
-          <p>
-            Bring a printed copy of your ticket or show the e-ticket on your
-            mobile device at the entrance.
-          </p>
-          <p>We look forward to seeing you at the event!</p>
-          <p>
-            If you have any questions or need assistance, please contact our
-            support team at support@foofest.dk or call +45 66 64 20 69.
-          </p>
+      </div>
+
+      <div className="flex flex-col bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm mt-8 lg:mt-0 lg:w-1/3 lg:sticky lg:top-36">
+        <div className="flex flex-col space-y-4">
           <button
             onClick={handleDownloadTicket}
-            className="mt-4 px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
+            className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded"
           >
             Download Ticket
           </button>
           <button
             onClick={handleDownloadReceipt}
-            className="mt-4 px-4 py-2 bg-electricBlue hover:bg-deepRed text-white rounded"
+            className="px-4 py-2 bg-electricBlue hover:bg-deepRed text-white rounded"
           >
             Download Receipt
           </button>
           <button
             onClick={sendEmail}
-            className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded"
+            className="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded"
           >
             Resend Confirmation Email
           </button>
           {emailSent && (
-            <p className="mt-4 text-green-500">
+            <p className="text-green-500">
               Email sent successfully! Please check your spam/junk folder if you
-              can&apos;t find it in your inbox.{" "}
+              can&apos;t find it in your inbox.
             </p>
           )}
         </div>
