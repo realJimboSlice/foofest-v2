@@ -12,7 +12,7 @@ export default function Footer() {
             </h2>
           </div>
           <form action="" method="post">
-            <div className="grid grid-cols-2 gap-4 p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-10">
               <div>
                 <div>
                   <input
@@ -95,7 +95,7 @@ export default function Footer() {
       </section>
       <section className="section-sponsors py-10 bg-black text-white">
         <div className="container mx-auto px-5">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div className="sponsor-grid_item flex items-center justify-center">
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <Image

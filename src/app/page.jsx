@@ -22,9 +22,12 @@ export default function Home() {
             />
             {/* Overlay Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
-              <h1 className="text-4xl md:text-5xl font-bold mb-8 text-white borderText">
+              <h1 className="text-4xl md:text-8xl font-bold mb-8 text-white borderText">
                 Foofest
               </h1>
+              <h2 className="text-2xl md:text-6xl font-bold mb-8 text-white borderText">
+                June 17th-24th 2025
+              </h2>
               <div className="space-y-4">
                 <a
                   href="/tickets"
@@ -32,7 +35,7 @@ export default function Home() {
                 >
                   Buy Tickets
                 </a>
-                <a
+                {/* <a
                   href="/schedule"
                   className="block bg-electricBlue text-white py-2 px-4 rounded hover:bg-deepRed transition duration-300"
                 >
@@ -43,7 +46,7 @@ export default function Home() {
                   className="block bg-electricBlue text-white py-2 px-4 rounded hover:bg-deepRed transition duration-300"
                 >
                   See Bands
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
