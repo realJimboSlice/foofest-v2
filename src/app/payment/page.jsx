@@ -218,12 +218,82 @@ const PaymentPageContent = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <h1 className="text-4xl font-bold mb-8">Payment</h1>
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-4">
+    <div className="flex flex-col lg:flex-row justify-center items-start min-h-screen bg-black text-white mt-32">
+      {/* Payment Form Section */}
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-4 lg:mr-8 lg:sticky">
+        <h1 className="text-4xl font-bold mb-8">Payment</h1>
         <h2 className="text-2xl font-bold mb-4">
           Total Amount: {totalAmount} kr
         </h2>
+        <CreditCard
+          number={number}
+          name={name}
+          expiry={expiry}
+          cvc={cvc}
+          focused={focus}
+          issuer={issuer}
+        />
+        <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-3">
+            <input
+              type="tel"
+              name="number"
+              placeholder="Card Number"
+              {...register("number")}
+              onFocus={(e) => setFocus(e.target.name)}
+              maxLength={19}
+              className="p-2 border rounded w-full bg-gray-700 text-white"
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              {...register("name")}
+              onFocus={(e) => setFocus(e.target.name)}
+              maxLength={26}
+              className="p-2 border rounded w-full bg-gray-700 text-white"
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="tel"
+              name="expiry"
+              placeholder="MM/YY"
+              {...register("expiry")}
+              onFocus={(e) => setFocus(e.target.name)}
+              onInput={handleExpiryInput}
+              value={expiry}
+              pattern="\d{2}/\d{2}"
+              maxLength={5}
+              className="p-2 border rounded w-full bg-gray-700 text-white"
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="tel"
+              name="cvc"
+              placeholder="CVC"
+              {...register("cvc")}
+              onFocus={(e) => setFocus(e.target.name)}
+              onInput={handleCVCInput}
+              maxLength={3}
+              className="p-2 border rounded w-full bg-gray-700 text-white"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-electricBlue hover:bg-deepRed text-white rounded font-semibold transition-colors duration-300 w-full"
+          >
+            Pay {totalAmount} kr
+          </button>
+        </form>
+      </div>
+
+      {/* Cost Breakdown Section */}
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm mt-8 lg:mt-0 lg:sticky lg:top-32">
+        <h2 className="text-2xl font-bold mb-4">Cost Breakdown</h2>
         <div className="space-y-2">
           {breakdown.regularTicketsCost > 0 && (
             <p>Regular Tickets Cost: {breakdown.regularTicketsCost} kr</p>
@@ -244,75 +314,21 @@ const PaymentPageContent = () => {
             <p>Booking Fee: {breakdown.bookingFee} kr</p>
           )}
         </div>
-        <div className="mt-8">
-          <CreditCard
-            number={number}
-            name={name}
-            expiry={expiry}
-            cvc={cvc}
-            focused={focus}
-            issuer={issuer}
-          />
-          <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-3">
-              <input
-                type="tel"
-                name="number"
-                placeholder="Card Number"
-                {...register("number")}
-                onFocus={(e) => setFocus(e.target.name)}
-                maxLength={19}
-                className="p-2 border rounded w-full bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                {...register("name")}
-                onFocus={(e) => setFocus(e.target.name)}
-                maxLength={26}
-                className="p-2 border rounded w-full bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="tel"
-                name="expiry"
-                placeholder="MM/YY"
-                {...register("expiry")}
-                onFocus={(e) => setFocus(e.target.name)}
-                onInput={handleExpiryInput}
-                value={expiry}
-                pattern="\d{2}/\d{2}"
-                maxLength={5}
-                className="p-2 border rounded w-full bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="tel"
-                name="cvc"
-                placeholder="CVC"
-                {...register("cvc")}
-                onFocus={(e) => setFocus(e.target.name)}
-                onInput={handleCVCInput}
-                maxLength={3}
-                className="p-2 border rounded w-full bg-gray-700 text-white"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-3 bg-electricBlue hover:bg-deepRed text-white rounded font-semibold transition-colors duration-300 w-full"
-            >
-              Pay {totalAmount} kr
-            </button>
-          </form>
+        <hr className="border-gray-600 my-4" />
+        <div className="flex justify-between text-xl font-bold">
+          <span>Total Amount</span>
+          <span>{totalAmount} kr</span>
         </div>
-        <div className="text-red-500 mt-4 text-center">
-          Time remaining: {Math.floor(remainingTime / 60)}:
-          {("0" + (remainingTime % 60)).slice(-2)} minutes
+        {/* Countdown Timer Section */}
+        <div className="w-full max-w-sm mt-4 lg:mt-8">
+          <p className="text-xl font-bold text-center">
+            Time remaining to complete booking:{" "}
+            <span className="text-red-500">
+              {Math.floor(remainingTime / 60)}:
+              {("0" + (remainingTime % 60)).slice(-2)}
+            </span>{" "}
+            minutes
+          </p>
         </div>
       </div>
     </div>
