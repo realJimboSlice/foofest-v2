@@ -44,6 +44,7 @@ export default function Footer() {
                     name="opt-in"
                     id="opt-in"
                     required
+                    aria-label="Opt-in to newsletter checkbox"
                     aria-checked="false"
                     className="h-5 w-5 text-electricBlue border-gray-300 rounded focus:ring-electricBlue text-sm"
                   />
