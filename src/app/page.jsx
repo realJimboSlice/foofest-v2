@@ -23,7 +23,7 @@ export default function Home() {
             {/* Overlay Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
               <h1 className="text-4xl md:text-5xl font-bold mb-8 text-white borderText">
-                Welcome to Foofest Heavy Metal Festival
+                Foofest
               </h1>
               <div className="space-y-4">
                 <a
