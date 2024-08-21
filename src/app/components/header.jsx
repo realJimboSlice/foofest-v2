@@ -2,13 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import "../globals.css";
-import { useState } from "react";
 import MobileNavigation from "./MobileNavigation";
 
 export default function Header() {
   return (
     <header className="">
-      <nav className="w-full fixed top-0 left-0 right-0 z-10 bg-black top-0">
+      <nav className="w-full fixed top-0 left-0 right-0 z-10 bg-black">
         <div className="justify-between md:mx-10">
           <div>
             <div className="flex items-center justify-between">

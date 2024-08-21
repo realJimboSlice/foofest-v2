@@ -50,13 +50,12 @@ export default function Footer() {
                   />
                   <span className="ml-2">
                     I WANT TO RECEIVE THE NEWSLETTER AND I ACCEPT{" "}
-                    <a
+                    <Link
                       href="#"
                       target="_blank"
                       className="text-electricBlue underline"
-                    >
-                      THE PRIVACY POLICY
-                    </a>
+                    />
+                    THE PRIVACY POLICY
                   </span>
                 </div>
               </div>
@@ -66,15 +65,7 @@ export default function Footer() {
                     We use SMTP2GO as our marketing platform. By completing and
                     submitting the form, you confirm that the information you
                     have provided will be sent to SMTP2GO for processing in
-                    accordance with the{" "}
-                    <a
-                      href="#"
-                      target="_blank"
-                      className="text-electricBlue underline"
-                    >
-                      Terms of Use
-                    </a>
-                    .
+                    accordance with the terms of Use.
                   </p>
                 </div>
               </div>
@@ -100,7 +91,7 @@ export default function Footer() {
         <div className="container mx-auto px-5">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div className="sponsor-grid_item flex items-center justify-center">
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <Link href="#" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/assets/sponsors/corona.webp"
                   alt="Corona"
@@ -108,10 +99,10 @@ export default function Footer() {
                   height={100}
                   className="object-contain"
                 />
-              </a>
+              </Link>
             </div>
             <div className="sponsor-grid_item flex items-center justify-center">
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <Link href="#" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/assets/sponsors/heineken.webp"
                   alt="Heineken"
@@ -119,10 +110,10 @@ export default function Footer() {
                   height={100}
                   className="object-contain"
                 />
-              </a>
+              </Link>
             </div>
             <div className="sponsor-grid_item flex items-center justify-center">
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <Link href="#" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/assets/sponsors/jim-beam.webp"
                   alt="Jim Beam Whiskey"
@@ -130,10 +121,10 @@ export default function Footer() {
                   height={100}
                   className="object-contain"
                 />
-              </a>
+              </Link>
             </div>
             <div className="sponsor-grid_item flex items-center justify-center">
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <Link href="#" target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/assets/sponsors/kims-chips.webp"
                   alt="Kims Chips"
@@ -141,7 +132,7 @@ export default function Footer() {
                   height={100}
                   className="object-contain"
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
