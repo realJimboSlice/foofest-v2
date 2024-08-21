@@ -45,7 +45,7 @@ export default async function Lineup() {
 
             {/* Content Overlay */}
             <div className="absolute inset-0 flex items-end justify-left p-2">
-              <span className="text-2xl font-bold text-white text-center z-10">
+              <span className="text-2xl font-bold text-white text-center z-0">
                 {band.name}
               </span>
             </div>
