@@ -31,7 +31,7 @@ export default function Home() {
               <div className="space-y-4">
                 <a
                   href="/tickets"
-                  className="block bg-electricBlue text-white py-2 px-4 rounded hover:bg-deepRed transition duration-300"
+                  className="block bg-electricBlue text-white py-4 px-8 rounded hover:bg-deepRed transition duration-300 text-xl"
                 >
                   Buy Tickets
                 </a>

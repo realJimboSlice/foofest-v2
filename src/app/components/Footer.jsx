@@ -20,7 +20,7 @@ export default function Footer() {
                     name="first-name"
                     id="first-name"
                     placeholder="FIRST NAME *"
-                    required="required"
+                    required
                     className="w-full p-2 border border-white bg-black rounded-md focus:outline-none focus:ring-2 focus:ring-electricBlue placeholder-white"
                   />
                 </div>
@@ -32,7 +32,7 @@ export default function Footer() {
                     name="email"
                     id="email"
                     placeholder="EMAIL ADDRESS *"
-                    required="required"
+                    required
                     className="w-full p-2 border border-white bg-black rounded-md focus:outline-none focus:ring-2 focus:ring-electricBlue placeholder-white"
                   />
                 </div>
@@ -43,7 +43,8 @@ export default function Footer() {
                     type="checkbox"
                     name="opt-in"
                     id="opt-in"
-                    required="required"
+                    required
+                    aria-checked="false"
                     className="h-5 w-5 text-electricBlue border-gray-300 rounded focus:ring-electricBlue text-sm"
                   />
                   <span className="ml-2">
