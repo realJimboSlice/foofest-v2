@@ -4,7 +4,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import supabase from "../../lib/supabaseClient";
-import Head from "next/head";
 import jsPDF from "jspdf";
 import JSBarcode from "jsbarcode";
 import Loading from "../components/Loading";

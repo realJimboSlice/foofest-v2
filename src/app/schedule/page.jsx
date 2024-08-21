@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Navigation from "../components/navigation";
 import Image from "next/image";
 
 // Function to fetch schedule data
