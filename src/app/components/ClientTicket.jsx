@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "../components/Loading";
 
 // Define the ClientTicketPage component
 const ClientTicket = ({ spots }) => {
@@ -20,9 +21,7 @@ const ClientTicket = ({ spots }) => {
         Choose an Area
       </h1>
       {loading ? (
-        <p className="text-lg text-electricBlue animate-pulse">
-          Loading... Please wait...
-        </p>
+        <Loading />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-4xl">
           {spots.map((spot) => (

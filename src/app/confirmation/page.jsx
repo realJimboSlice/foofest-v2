@@ -7,6 +7,7 @@ import supabase from "../../lib/supabaseClient";
 import Head from "next/head";
 import jsPDF from "jspdf";
 import JSBarcode from "jsbarcode";
+import Loading from "../components/Loading";
 
 // Define the ConfirmationPage component
 const ConfirmationPageContent = () => {
@@ -418,7 +419,7 @@ const ConfirmationPageContent = () => {
 };
 
 const ConfirmationPage = () => (
-  <Suspense fallback={<div>Loading booking details...</div>}>
+  <Suspense fallback={<Loading />}>
     <ConfirmationPageContent />
   </Suspense>
 );

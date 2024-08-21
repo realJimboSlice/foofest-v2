@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState, Suspense } from "react";
 import CountrySelect from "../components/countrySelect";
 import supabase from "../../lib/supabaseClient";
+import Loading from "../components/Loading";
 
 const BookingFormContent = () => {
   const router = useRouter();
@@ -510,7 +511,7 @@ const BookingFormContent = () => {
 };
 
 const BookingForm = () => (
-  <Suspense fallback={<div>Loading booking details...</div>}>
+  <Suspense fallback={<Loading />}>
     <BookingFormContent />
   </Suspense>
 );

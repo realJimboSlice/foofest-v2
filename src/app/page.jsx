@@ -26,7 +26,7 @@ export default function Home() {
                 Foofest
               </h1>
               <h2 className="text-2xl md:text-6xl font-bold mb-8 text-white borderText">
-                June 17th-24th 2025
+                June 20th-27th 2024
               </h2>
               <div className="space-y-4">
                 <a

@@ -8,6 +8,7 @@ import CreditCard from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { useForm } from "react-hook-form";
 import Payment from "payment";
+import Loading from "../components/Loading";
 
 // Define the PaymentPage component
 const PaymentPageContent = () => {
@@ -336,7 +337,7 @@ const PaymentPageContent = () => {
 };
 
 const PaymentPage = () => (
-  <Suspense fallback={<div>Loading booking details...</div>}>
+  <Suspense fallback={<Loading />}>
     <PaymentPageContent />
   </Suspense>
 );
