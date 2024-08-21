@@ -190,11 +190,10 @@ const BookingFormContent = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <h1 className="text-4xl md:text-5xl font-bold mb-8">Booking</h1>
+    <div className="flex flex-col lg:flex-row justify-center items-start min-h-screen bg-black text-white mt-32">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-6"
+        className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg space-y-6 lg:mr-8"
       >
         <div className="flex flex-col">
           <label htmlFor="area" className="mb-2 font-semibold">
@@ -475,21 +474,6 @@ const BookingFormContent = () => {
           )}
         </div>
 
-        <div className="flex flex-col items-center">
-          <p className="text-xl font-bold mb-2">Cost Breakdown</p>
-          {costItems.map(
-            (item, index) =>
-              item.cost !== null && (
-                <p key={index}>
-                  {item.label}: {item.cost} kr
-                </p>
-              )
-          )}
-          <p className="text-2xl font-bold mt-4">
-            Total amount: {totalAmount} kr
-          </p>
-        </div>
-
         <button
           type="submit"
           className={`px-6 py-3 w-full ${
@@ -502,6 +486,25 @@ const BookingFormContent = () => {
           Submit
         </button>
       </form>
+
+      {/* Cost Breakdown Section */}
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-sm mt-8 lg:mt-0 lg:sticky lg:top-32">
+        <h2 className="text-2xl font-bold mb-4">Cost Breakdown</h2>
+        {costItems.map(
+          (item, index) =>
+            item.cost !== null && (
+              <div key={index} className="flex justify-between mb-2">
+                <span>{item.label}</span>
+                <span>{item.cost} kr</span>
+              </div>
+            )
+        )}
+        <hr className="border-gray-600 my-4" />
+        <div className="flex justify-between text-xl font-bold">
+          <span>Total Amount</span>
+          <span>{totalAmount} kr</span>
+        </div>
+      </div>
     </div>
   );
 };

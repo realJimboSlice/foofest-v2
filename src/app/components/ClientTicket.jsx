@@ -15,7 +15,7 @@ const ClientTicket = ({ spots }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 flex flex-col items-center">
+    <div className="min-h-screen bg-black text-white p-4 flex flex-col items-center mt-32">
       <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">
         Choose an Area
       </h1>

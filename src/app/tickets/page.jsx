@@ -4,7 +4,7 @@
 // Import necessary modules from react
 import React from "react";
 // Import the ClientTicketPage component
-import ClientTicket from "./ClientTicket";
+import ClientTicket from "../components/ClientTicket";
 
 // Define an async function to fetch available spots
 async function fetchSpots() {
