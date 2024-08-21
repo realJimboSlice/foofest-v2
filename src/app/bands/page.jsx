@@ -8,19 +8,16 @@ async function fetchBands() {
   return bands;
 }
 
-// Main function to render the lineup page
 export default async function Lineup() {
   // Fetch the band data
   const bands = await fetchBands();
 
-  // Render the band data
   return (
     <section className="min-h-screen bg-black text-white p-4 mt-10">
       <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">
         Band Lineup
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {/* Map over the band data and render each band */}
         {bands.map((band) => (
           <Link
             href={`/bands/${band.slug}`}
@@ -49,12 +46,6 @@ export default async function Lineup() {
                 {band.name}
               </span>
             </div>
-
-            {/* Additional Metadata - Optional */}
-            {/* Uncomment and modify the following lines if you want to add additional information */}
-            {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 text-center">
-              <span className="text-sm text-gray-300">Additional Info</span>
-            </div> */}
           </Link>
         ))}
       </div>
