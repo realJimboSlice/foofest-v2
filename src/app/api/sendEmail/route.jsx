@@ -1,10 +1,10 @@
-// Email functionality using Nodemailer and SMTP2GO - with assistance from from ChatGPT 4.0
+// Email functionality using Nodemailer and SMTP2GO
 
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
-    // Log the request body
+    // Logs the request body
     const { email, subject, text, html, attachments } = await req.json();
     console.log("Received request with data:", {
       email,
@@ -14,7 +14,7 @@ export async function POST(req) {
       attachments,
     });
 
-    // Create a transporter object using SMTP2GO
+    // Transporter object using SMTP2GO
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
@@ -26,9 +26,9 @@ export async function POST(req) {
 
     console.log("SMTP transporter configured");
 
-    // Define email options
+    // Defines email options - uses email associated with smtp2go
     const mailOptions = {
-      from: "jbarbour95@hotmail.com", // Your verified email
+      from: "jbarbour95@hotmail.com",
       to: email,
       subject: subject,
       text: text,
@@ -42,7 +42,7 @@ export async function POST(req) {
 
     console.log("Mail options prepared:", mailOptions);
 
-    // Send email
+    // Sends the email
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully");
 
