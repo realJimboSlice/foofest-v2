@@ -1,6 +1,6 @@
 "use client";
 
-// Import necessary hooks and utilities
+
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import supabase from "../../lib/supabaseClient";
@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import Payment from "payment";
 import Loading from "../components/Loading";
 
-// Define the PaymentPage component
+// PaymentPage
 const PaymentPageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
